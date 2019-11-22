@@ -137,9 +137,7 @@ public class CtlLogin extends HttpServlet {
             }
         }
         
-        
-         
-        
+                      
                      
     }
 
@@ -149,7 +147,6 @@ public class CtlLogin extends HttpServlet {
             byte[] messageDigest = md.digest(input.getBytes());
             BigInteger number = new BigInteger(1, messageDigest);
             String hashtext = number.toString(16);
-
             while (hashtext.length() < 32) {
                 hashtext = "0" + hashtext;
             }
