@@ -35,7 +35,7 @@
             <input type="text" id="password" name="password" value="${dato.usuario}" />
             <br><br>  
             <label>Contraseña</label>
-            <input type="text" id="password" name="password" value="${dato.contraseña}" />
+            <input type="password" id="password" name="password" value="${dato.contraseña}" />
             <br><br>  
             <label>Rol</label>
             <input type="text" id="password" name="password" value="${dato.idRol.nombre}" />

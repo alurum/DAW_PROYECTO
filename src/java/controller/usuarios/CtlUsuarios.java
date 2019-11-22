@@ -8,17 +8,14 @@ package controller.usuarios;
 import controller.CtlLogin;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import javax.ejb.EJB;
-import javax.persistence.Convert;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import model.entities.Asociado;
 import model.sessions.AsociadoFacade;
 
@@ -45,14 +42,15 @@ public class CtlUsuarios extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        url = request.getServletPath();
-        Integer id_usuario;
-        Asociado usuario;
+        HttpSession session = request.getSession(false);
+        if (session != null){
+        url = request.getServletPath();        
+        Asociado usuario;        
         switch (url) {
-
             case "/usuarios":
                 List<Asociado> asociados = uF.findAll();                
                 request.setAttribute("datos", asociados);
+                request.setAttribute("usuario", session.getAttribute("usuario"));
                 getServletContext().getRequestDispatcher("/WEB-INF/views/usuarios.jsp").forward(request, response);
                 break;
             case "/editar-usuario":                
@@ -70,7 +68,9 @@ public class CtlUsuarios extends HttpServlet {
                 break;                                
 
         }
-
+        } else {        
+        response.sendRedirect("http://localhost:30533/Maar/");                            
+        }
     }
 
     /**

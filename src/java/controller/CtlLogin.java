@@ -5,7 +5,6 @@
  */
 package controller;
 
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigInteger;
@@ -20,19 +19,19 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import model.entities.Asociado;
 import model.entities.Rol;
 import model.sessions.AsociadoFacade;
-
 
 /**
  *
  * @author Lalo
  */
-@WebServlet(name = "CtllLogin", urlPatterns = {"/entrar","/registrar"})
+@WebServlet(name = "CtllLogin", urlPatterns = {"/entrar", "/registrar", "/logout"})
 public class CtlLogin extends HttpServlet {
 
-    private String url = "";    
+    private String url = "";
     @EJB
     private AsociadoFacade uF;
 
@@ -55,7 +54,13 @@ public class CtlLogin extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {                
+            throws ServletException, IOException {
+             url = request.getServletPath();    
+              if (url.equals("/logout")) {                                 
+             HttpSession session = request.getSession(false);
+             session.invalidate();
+             response.sendRedirect("http://localhost:30533/Maar/");             
+        }
     }
 
     /**
@@ -68,23 +73,26 @@ public class CtlLogin extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {        
+            throws ServletException, IOException {
         url = request.getServletPath();
-          Asociado usr = null;
-          Rol rol = null;
+        Asociado usr = null;
+        Rol rol = null;
         response.setContentType("text/html;charset=UTF-8");
-        if (url.equals("/entrar")) {                        
-        String usuario = request.getParameter("usuario");      
-        String contraseña = getMD5(request.getParameter("contraseña"));       
+        if (url.equals("/entrar")) {
+            String usuario = request.getParameter("usuario");
+            String contraseña = getMD5(request.getParameter("contraseña"));
             try {
                 usr = uF.findByUsuario(usuario);
                 String resultado = "";
-                RequestDispatcher rd;                  
-                if (usr.getUsuario().equals(usuario) && usr.getContraseña().equals(contraseña)) {        
-                    resultado = "Datos correctos";               
+                RequestDispatcher rd;
+                if (usr.getUsuario().equals(usuario) && usr.getContraseña().equals(contraseña)) {
+                    resultado = "Datos correctos";
+                    HttpSession session = request.getSession();    
+                    session.setAttribute("usuario", usr.getUsuario());
+                    session.setAttribute("id_Rol", usr.getIdRol());
                 } else {
-                    resultado = "Error";                    
-                  }
+                    resultado = "Error";
+                }
                 request.setAttribute("resultado", resultado);
                 try (PrintWriter out = response.getWriter()) {
                     out.print(resultado);
@@ -92,30 +100,34 @@ public class CtlLogin extends HttpServlet {
             } catch (Exception ex) {
                 Logger.getLogger(CtlLogin.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }        
-          if (url.equals("/registrar")) {                        
+        }
+        if (url.equals("/registrar")) {
             usr = new Asociado();
             rol = new Rol();
             rol.setIdRol(1);
-            rol.setNombre("adminitrador");            
+            rol.setNombre("adminitrador");
             String contraseña = getMD5(request.getParameter("Rcontraseña1"));
             try {
-                String resultado = "";
-                RequestDispatcher rd;
+                String resultado = "Error";                
                 if (request.getParameter("Rcontraseña1").equals(request.getParameter("Rcontraseña2"))) {                    
-                    usr.setIdAso(0);    
-                    usr.setNombre(request.getParameter("nombre"));
-                    usr.setSalario(1000.00);
-                    usr.setCelular(Integer.parseInt(request.getParameter("celular")));
-                    usr.setDireccion(request.getParameter("direccion"));
-                    usr.setUsuario(request.getParameter("Rusuario"));                    
-                    usr.setContraseña(contraseña);
-                    usr.setIdRol(rol);
-                    uF.create(usr);
-                    resultado = "Registro correcto";               
+                    Asociado us = uF.findDuplicate(request.getParameter("Rusuario"));                   
+                    if (us.getUsuario().equalsIgnoreCase("disponible")) {
+                        usr.setIdAso(0);
+                        usr.setNombre(request.getParameter("nombre"));
+                        usr.setSalario(1000.00);
+                        usr.setCelular(Integer.parseInt(request.getParameter("celular")));
+                        usr.setDireccion(request.getParameter("direccion"));
+                        usr.setUsuario(request.getParameter("Rusuario"));
+                        usr.setContraseña(contraseña);
+                        usr.setIdRol(rol);
+                        uF.create(usr);
+                        resultado = "Registro correcto";
+                    } else {
+                        resultado = "Usuario no disponible";
+                    }
                 } else {
-                                        resultado = "Error";                    
-                  }
+                    resultado = "Contraseñas diferentes";
+                }
                 request.setAttribute("resultado", resultado);
                 try (PrintWriter out = response.getWriter()) {
                     out.print(resultado);
@@ -125,8 +137,12 @@ public class CtlLogin extends HttpServlet {
             }
         }
         
+        
+         
+        
+                     
     }
-    
+
     public static String getMD5(String input) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
