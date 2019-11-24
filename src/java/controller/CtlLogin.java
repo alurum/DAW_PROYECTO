@@ -88,8 +88,14 @@ public class CtlLogin extends HttpServlet {
                 if (usr.getUsuario().equals(usuario) && usr.getContraseña().equals(contraseña)) {
                     resultado = "Datos correctos";
                     HttpSession session = request.getSession();    
-                    session.setAttribute("usuario", usr.getUsuario());
-                    session.setAttribute("id_Rol", usr.getIdRol());
+                    session.setAttribute("idAso", usr.getIdAso());                    
+                    session.setAttribute("nombre", usr.getNombre());                    
+                    session.setAttribute("salario", usr.getSalario());                    
+                    session.setAttribute("celular", usr.getCelular());                    
+                    session.setAttribute("direccion", usr.getDireccion());                    
+                    session.setAttribute("usuario", usr.getUsuario());                    
+                    session.setAttribute("contraseña", usr.getContraseña());
+                    session.setAttribute("idRol", usr.getIdRol());                    
                 } else {
                     resultado = "Error";
                 }
@@ -111,7 +117,7 @@ public class CtlLogin extends HttpServlet {
                 String resultado = "Error";                
                 if (request.getParameter("Rcontraseña1").equals(request.getParameter("Rcontraseña2"))) {                    
                     Asociado us = uF.findDuplicate(request.getParameter("Rusuario"));                   
-                    if (us.getUsuario().equalsIgnoreCase("disponible")) {
+                    if (us.getUsuario().equals("disponible")) {
                         usr.setIdAso(0);
                         usr.setNombre(request.getParameter("nombre"));
                         usr.setSalario(1000.00);
