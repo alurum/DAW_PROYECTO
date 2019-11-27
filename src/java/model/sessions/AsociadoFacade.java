@@ -61,20 +61,23 @@ public class AsociadoFacade extends AbstractFacade<Asociado> {
             return asc;                                    
         }                         
     }
-
-    public Asociado Insert(Asociado usuario) {
-        Query query = em.createNativeQuery("Insert into asociado values (?,?,?,?,?,?,?,?)", Asociado.class);
-        query.setParameter(1, usuario.getIdAso());
-        query.setParameter(2, usuario.getNombre());
-        query.setParameter(3, usuario.getSalario());
-        query.setParameter(4, usuario.getCelular());
-        query.setParameter(5, usuario.getDireccion());
-        query.setParameter(6, usuario.getUsuario());
-        query.setParameter(7, usuario.getContraseña());
-        query.setParameter(8, usuario.getIdRol());
-        System.out.println((Asociado) query.getSingleResult());
-        return (Asociado) query.getSingleResult();
-
+    
+    
+    
+    public Asociado findDuplicateUpdate(String usuarioNuevo, String usuarioActual ) {
+        Asociado asc = new Asociado();
+        Query query = em.createNativeQuery("select * from asociado where usuario = ? and usuario <> ?", Asociado.class);
+        query.setParameter(1, usuarioNuevo);        
+        query.setParameter(2, usuarioActual);        
+        try {
+           return (Asociado) query.getSingleResult();
+        } catch (NoResultException nre) {
+            asc.setUsuario("disponible");
+            return asc;                                    
+        }                         
     }
+    
+    
+  
 
 }

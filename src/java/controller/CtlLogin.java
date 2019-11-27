@@ -88,18 +88,17 @@ public class CtlLogin extends HttpServlet {
                 if (usr.getUsuario().equals(usuario) && usr.getContraseña().equals(contraseña)) {
                     resultado = "Datos correctos";
                     HttpSession session = request.getSession();    
-                    session.setAttribute("idAso", usr.getIdAso());                    
-                    session.setAttribute("nombre", usr.getNombre());                    
-                    session.setAttribute("salario", usr.getSalario());                    
-                    session.setAttribute("celular", usr.getCelular());                    
-                    session.setAttribute("direccion", usr.getDireccion());                    
-                    session.setAttribute("usuario", usr.getUsuario());                    
-                    session.setAttribute("contraseña", usr.getContraseña());
-                    session.setAttribute("idRol", usr.getIdRol());                    
+                    session.setAttribute("SSidAso", usr.getIdAso());                    
+                    session.setAttribute("SSnombre", usr.getNombre());                    
+                    session.setAttribute("SSsalario", usr.getSalario());                    
+                    session.setAttribute("SScelular", usr.getCelular());                    
+                    session.setAttribute("SSdireccion", usr.getDireccion());                    
+                    session.setAttribute("SSusuario", usr.getUsuario());                    
+                    session.setAttribute("SScontraseña", usr.getContraseña());
+                    session.setAttribute("SSidRol", usr.getIdRol());                    
                 } else {
                     resultado = "Error";
-                }
-                request.setAttribute("resultado", resultado);
+                }                
                 try (PrintWriter out = response.getWriter()) {
                     out.print(resultado);
                 }
