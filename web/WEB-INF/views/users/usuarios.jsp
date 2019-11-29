@@ -15,13 +15,13 @@
 <table  table id="users" class="table table-striped table-bordered" style="width:100%">
     <thead>
         <tr>
-            <th align="center">NOMBRE</th>
-            <th align="center">SALARIO</th>
-            <th align="center">CELULAR</th>
-            <th align="center">DIRECCIÓN</th>
-            <th align="center">USUARIO</th>
-            <th align="center">ROL</th>
-            <th align="center">OPCIONES</th>
+            <th style="text-align:center">NOMBRE</th>
+            <th style="text-align:center">SALARIO</th>
+            <th style="text-align:center">CELULAR</th>
+            <th style="text-align:center">DIRECCIÓN</th>
+            <th style="text-align:center">USUARIO</th>
+            <th style="text-align:center">ROL</th>
+            <th style="text-align:center">OPCIONES</th>
         </tr>
     </thead>
     <tbody>
@@ -36,7 +36,7 @@
                 
                 <td align="center">                                       
                     <button type="button" class="btn btn-warning btn-sm"  name="Editar"  onclick="location.href = 'editar-usuario?i=${dato.usuario}'"><i class="fa fa-pencil-square-o"></i> Editar</button> 
-                    <button type="button" class="btn btn-danger btn-sm " name="Borrar"  onclick="drop ( '${dato.usuario}' )"><i class="fa fa-remove"></i> Borrar</button>
+                    <button type="button" class="btn btn-danger btn-sm " name="Borrar"  onclick="drop ( '${dato.usuario}', '${SSusuario}' ) "><i class="fa fa-remove"></i> Borrar</button>
                 </td>                                                                       
             </tr>
         </c:forEach>

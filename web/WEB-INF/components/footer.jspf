@@ -18,9 +18,9 @@
 <script src="Resources/Template/js/bootstrap.min.js"></script>
 
 <!-- Morris Charts JavaScript -->
-<script src="Resources/Template/js/plugins/morris/raphael.min.js"></script>
+<!-- <script src="Resources/Template/js/plugins/morris/raphael.min.js"></script>
 <script src="Resources/Template/js/plugins/morris/morris.min.js"></script>
-<script src="Resources/Template/js/plugins/morris/morris-data.js"></script>
+<script src="Resources/Template/js/plugins/morris/morris-data.js"></script> --> 
 <!-- Data table -->        
 <script  src="https://code.jquery.com/jquery-3.3.1.js"></script>
 <script  src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
@@ -36,127 +36,7 @@
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" type="text/javascript"></script>
 
-<script>
-
-    var SSidAso = document.getElementById("SSidAso").value;
-    var SSusuario = document.getElementById("SSusuario").value;
-    var SSpassword = document.getElementById("SSpassword").value;
-    var SSRpassword = document.getElementById("SSRpassword").value;
-
-
-    var action = document.getElementById("action").value;
-    var idAso = document.getElementById("idAso").value;
-    var nombre = document.getElementById("nombre").value;
-    var salario = document.getElementById("salario").value;
-    var password = document.getElementById("password").value;
-    var Rpassword = document.getElementById("Rpassword").value;
-    var celular = document.getElementById("celular").value;
-    var direccion = document.getElementById("direccion").value;
-    var usuario = document.getElementById("usuario").value;
-    var idRol = document.getElementById("idRol").value;
-
-
-    function registrar() {
-        $.ajax({
-            url: action,
-            type: 'POST',
-            data: {idAso: idAso, nombre: nombre, salario: salario, password: password, Rpassword: Rpassword, celular: celular, direccion: direccion, usuario: usuario, idRol: idRol},
-            success: function (resultado) {
-                switch (resultado) {
-                    case "Registro correcto":
-                        alert(resultado);
-                        location.href = 'http://localhost:30533/Maar/usuarios';
-                        break;
-                    case "Usuario no disponible":
-                        alert(resultado);
-                        break;
-                    case "Contraseñas diferentes":
-                        alert(resultado);
-                        break;
-                        defaul:
-                                location.reload();
-                }
-            },
-            error: function (resultado) {
-                location.reload();
-                alert("Algo salio mal, intente nuevamente" + resultado);
-            }
-
-        });
-
-    }
-    ;
-
-
-
-
-    function profile() {
-        $.ajax({
-            url: 'profile',
-            type: 'POST',
-            data: {SSidAso: SSidAso, SSusuario: SSusuario, SSpassword: SSpassword, SSRpassword: SSRpassword},
-            success: function (resultado) {
-                switch (resultado) {
-                    case "Registro correcto":
-                        alert(resultado);
-                        location.href = 'http://localhost:30533/Maar/usuarios';
-                        break;
-                    case "Usuario no disponible":
-                        alert(resultado);
-                        break;
-                    case "Contraseñas diferentes":
-                        alert(resultado);
-                        break;
-                        defaul:
-                                location.reload();
-                }
-            },
-            error: function (resultado) {
-                alert("Algo salio mal, intente nuevamente" + resultado);
-            }
-
-        });
-
-    }
-    ;
-
-
-
-
-
-
-
-    function drop(usuario) {
-        if (confirm("¿Seguro que deseas realizar esta accion?")) {
-            txt = "You pressed OK!";
-            $.ajax({
-                url: 'borrar-usuario',
-                type: "POST",
-                data: {usuario: usuario},
-                success: function (resultado) {
-                    alert(resultado);
-                    location.reload();
-                },
-                error: function (resultado) {
-                    alert("Algo salio mal, intente nuevamente" + resultado);
-                }
-            });
-
-        }
-
-    }
-
-
-
-
-
-
-    jQuery(document).ready(function ($) {
-
-
-
-    });
-</script>
+        <script  src="Resources/users/script.js"></script>
 
 
 </body>

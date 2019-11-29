@@ -75,8 +75,8 @@ public class CtlLogin extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         url = request.getServletPath();
-        Asociado usr = null;
-        Rol rol = null;
+        Asociado usr = new Asociado();
+        Rol rol = new Rol();
         response.setContentType("text/html;charset=UTF-8");
         if (url.equals("/entrar")) {
             String usuario = request.getParameter("usuario");
@@ -106,11 +106,9 @@ public class CtlLogin extends HttpServlet {
                 Logger.getLogger(CtlLogin.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        if (url.equals("/registrar")) {
-            usr = new Asociado();
-            rol = new Rol();
-            rol.setIdRol(1);
-            rol.setNombre("adminitrador");
+        if (url.equals("/registrar")) {            
+            rol.setIdRol(2);
+            rol.setNombre("repartidor");
             String contraseña = getMD5(request.getParameter("Rcontraseña1"));
             try {
                 String resultado = "Error";                
@@ -119,7 +117,7 @@ public class CtlLogin extends HttpServlet {
                     if (us.getUsuario().equals("disponible")) {
                         usr.setIdAso(0);
                         usr.setNombre(request.getParameter("nombre"));
-                        usr.setSalario(1000.00);
+                        usr.setSalario(0.00);
                         usr.setCelular(Integer.parseInt(request.getParameter("celular")));
                         usr.setDireccion(request.getParameter("direccion"));
                         usr.setUsuario(request.getParameter("Rusuario"));

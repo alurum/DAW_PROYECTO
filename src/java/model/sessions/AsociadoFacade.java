@@ -5,10 +5,11 @@
  */
 package model.sessions;
 
+
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import model.entities.Asociado;
@@ -49,6 +50,13 @@ public class AsociadoFacade extends AbstractFacade<Asociado> {
         query.setParameter(1, usuario);
         return (Asociado) query.getSingleResult();
     }
+    
+    
+      public List<Asociado> findAllExcept(String usuario) {
+        Query query = em.createNativeQuery("select * from asociado where usuario <> ?", Asociado.class);
+        query.setParameter(1, usuario);
+        return (List<Asociado>)  query.getResultList();
+    }
 
     public Asociado findDuplicate(String usuario) {
         Asociado asc = new Asociado();
@@ -61,14 +69,27 @@ public class AsociadoFacade extends AbstractFacade<Asociado> {
             return asc;                                    
         }                         
     }
-    
-    
+        
     
     public Asociado findDuplicateUpdate(String usuarioNuevo, String usuarioActual ) {
         Asociado asc = new Asociado();
         Query query = em.createNativeQuery("select * from asociado where usuario = ? and usuario <> ?", Asociado.class);
         query.setParameter(1, usuarioNuevo);        
         query.setParameter(2, usuarioActual);        
+        try {
+           return (Asociado) query.getSingleResult();
+        } catch (NoResultException nre) {
+            asc.setUsuario("disponible");
+            return asc;                                    
+        }                         
+    }
+    
+    
+    
+    public Asociado findRoles(Integer idRol ) {
+        Asociado asc = new Asociado();
+        Query query = em.createNativeQuery("select * from asociado where id_Rol = ? LIMIT 1;", Asociado.class);
+        query.setParameter(1, idRol);                
         try {
            return (Asociado) query.getSingleResult();
         } catch (NoResultException nre) {

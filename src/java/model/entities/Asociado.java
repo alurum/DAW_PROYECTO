@@ -60,7 +60,7 @@ public class Asociado implements Serializable {
     @Size(max = 40)
     @Column(name = "usuario")
     private String usuario;
-    
+    @Size(max = 40)
     @Column(name = "contrase\u00f1a")
     private String contraseña;
     @OneToMany(mappedBy = "idAso")

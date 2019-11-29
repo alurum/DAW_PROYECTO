@@ -3,20 +3,14 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
-
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="">
         <meta name="author" content="">
-        <title>MAAR</title>
-        <!-- Bootstrap Core CSS -->
-        <!--<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">-->
-        <link href="Resources/Template/css/bootstrap.min.css" rel="stylesheet">
-        <!-- DATA TABLE -->        
-        <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">-->        
+        <title>MAAR</title>        
+        <link href="Resources/Template/css/bootstrap.min.css" rel="stylesheet">        
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet">
         
         
@@ -54,34 +48,7 @@
                     <a class="navbar-brand" href="http://localhost:30533/Maar/usuarios"><i class="fa fa-home"></i>  INICIO</a>
                 </div>
                 <!-- Top Menu Items -->
-                <ul class="nav navbar-right top-nav">                    
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> <b class="caret"></b></a>
-                        <ul class="dropdown-menu alert-dropdown">
-                            <li>
-                                <a href="#">Alert Name <span class="label label-default">Alert Badge</span></a>
-                            </li>
-                            <li>
-                                <a href="#">Alert Name <span class="label label-primary">Alert Badge</span></a>
-                            </li>
-                            <li>
-                                <a href="#">Alert Name <span class="label label-success">Alert Badge</span></a>
-                            </li>
-                            <li>
-                                <a href="#">Alert Name <span class="label label-info">Alert Badge</span></a>
-                            </li>
-                            <li>
-                                <a href="#">Alert Name <span class="label label-warning">Alert Badge</span></a>
-                            </li>
-                            <li>
-                                <a href="#">Alert Name <span class="label label-danger">Alert Badge</span></a>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <a href="#">View All</a>
-                            </li>
-                        </ul>
-                    </li>
+                <ul class="nav navbar-right top-nav">                                        
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> ${SSusuario}<b class="caret"></b></a>
                         <ul class="dropdown-menu">
@@ -99,7 +66,10 @@
                 <div class="collapse navbar-collapse navbar-ex1-collapse">
                     <ul class="nav navbar-nav side-nav">                        
                         <li>
-                            <a href="charts.html"><i class="fa fa-fw fa-bar-chart-o"></i> Reportes</a>
+                            <a href="http://localhost:30533/Maar/usuarios"><i class="fa fa-fw fa-user"></i> Usuarios</a>
+                        </li>
+                        <li>
+                            <a href="http://localhost:30533/Maar/roles"><i class="fa fa-male"></i> Roles</a>
                         </li>
                         <li>
                             <a href="javascript:;" data-toggle="collapse" data-target="#ventas"><i class="fa fa-fw fa-money"></i> Ventas <i class="fa fa-fw fa-caret-down"></i></a>

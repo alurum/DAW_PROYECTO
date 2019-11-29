@@ -58,7 +58,7 @@
                                
                 <div class="col-sm-4 col-md-5  col-lg-4">
                     <div class="form-group"><strong>Contraseña</strong>
-                        <input class="form-control"  type="text" id="password" name="password" value="${dato.contraseña}" 
+                        <input class="form-control"  type="password" id="password" name="password" value="${dato.contraseña}" 
                                placeholder="Contraseña" maxlength="10" required>
                     </div>
                 </div>
@@ -67,7 +67,7 @@
                                
                 <div class="col-sm-4 col-md-5  col-lg-4">
                     <div class="form-group"><strong>Repita contraseña</strong>
-                        <input class="form-control"  type="text" id="Rpassword" name="Rpassword" value="${dato.contraseña}" 
+                        <input class="form-control"  type="password" id="Rpassword" name="Rpassword" value="${dato.contraseña}" 
                                placeholder="Repita contraseña" maxlength="10" required>
                     </div>
                 </div>
@@ -81,7 +81,7 @@
                             <i class="fa fa-times"> </i>
                             Cancelar
                         </a>
-                        <button type="submit" onclick="registrar()"
+                        <button  id="registrar"
                                 class="btn btn-primary">
                             <span class="glyphicon glyphicon-ok"></span>
                             Registrar
