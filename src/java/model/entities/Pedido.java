@@ -6,7 +6,9 @@
 package model.entities;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,9 +18,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -32,8 +37,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Pedido.findByIdPed", query = "SELECT p FROM Pedido p WHERE p.idPed = :idPed"),
     @NamedQuery(name = "Pedido.findByCantidad", query = "SELECT p FROM Pedido p WHERE p.cantidad = :cantidad"),
     @NamedQuery(name = "Pedido.findByDireccion", query = "SELECT p FROM Pedido p WHERE p.direccion = :direccion"),
-    @NamedQuery(name = "Pedido.findByComentario", query = "SELECT p FROM Pedido p WHERE p.comentario = :comentario"),
-    @NamedQuery(name = "Pedido.findByStatus", query = "SELECT p FROM Pedido p WHERE p.status = :status")})
+    @NamedQuery(name = "Pedido.findByComentario", query = "SELECT p FROM Pedido p WHERE p.comentario = :comentario")})
 public class Pedido implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -42,21 +46,30 @@ public class Pedido implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_Ped")
     private Integer idPed;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "cantidad")
-    private Integer cantidad;
-    @Size(max = 40)
+    private int cantidad;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 40)
     @Column(name = "direccion")
     private String direccion;
-    @Size(max = 40)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 40)
     @Column(name = "comentario")
     private String comentario;
-    @Column(name = "status")
-    private Boolean status;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPed")
+    private List<Venta> ventaList;
+    @JoinColumn(name = "id_suc", referencedColumnName = "id_suc")
+    @ManyToOne(optional = false)
+    private Sucursal idSuc;
     @JoinColumn(name = "id_Clien", referencedColumnName = "id_Clien")
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Cliente idClien;
     @JoinColumn(name = "id_Pro", referencedColumnName = "id_Pro")
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Producto idPro;
 
     public Pedido() {
@@ -64,6 +77,13 @@ public class Pedido implements Serializable {
 
     public Pedido(Integer idPed) {
         this.idPed = idPed;
+    }
+
+    public Pedido(Integer idPed, int cantidad, String direccion, String comentario) {
+        this.idPed = idPed;
+        this.cantidad = cantidad;
+        this.direccion = direccion;
+        this.comentario = comentario;
     }
 
     public Integer getIdPed() {
@@ -74,11 +94,11 @@ public class Pedido implements Serializable {
         this.idPed = idPed;
     }
 
-    public Integer getCantidad() {
+    public int getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(Integer cantidad) {
+    public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
     }
 
@@ -98,12 +118,21 @@ public class Pedido implements Serializable {
         this.comentario = comentario;
     }
 
-    public Boolean getStatus() {
-        return status;
+    @XmlTransient
+    public List<Venta> getVentaList() {
+        return ventaList;
     }
 
-    public void setStatus(Boolean status) {
-        this.status = status;
+    public void setVentaList(List<Venta> ventaList) {
+        this.ventaList = ventaList;
+    }
+
+    public Sucursal getIdSuc() {
+        return idSuc;
+    }
+
+    public void setIdSuc(Sucursal idSuc) {
+        this.idSuc = idSuc;
     }
 
     public Cliente getIdClien() {

@@ -72,6 +72,9 @@
                             <a href="http://localhost:30533/Maar/roles"><i class="fa fa-male"></i> Roles</a>
                         </li>
                         <li>
+                            <a href="http://localhost:30533/Maar/sucursales"><i class="fa fa-male"></i> Sucursales</a>
+                        </li>
+                        <li>
                             <a href="javascript:;" data-toggle="collapse" data-target="#ventas"><i class="fa fa-fw fa-money"></i> Ventas <i class="fa fa-fw fa-caret-down"></i></a>
                             <ul id="ventas" class="collapse">
                                 <li>

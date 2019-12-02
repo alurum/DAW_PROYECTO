@@ -8,6 +8,7 @@ package model.entities;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,6 +20,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -35,8 +37,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Cliente.findByIdClien", query = "SELECT c FROM Cliente c WHERE c.idClien = :idClien"),
     @NamedQuery(name = "Cliente.findByNombre", query = "SELECT c FROM Cliente c WHERE c.nombre = :nombre"),
     @NamedQuery(name = "Cliente.findByDireccion", query = "SELECT c FROM Cliente c WHERE c.direccion = :direccion"),
-    @NamedQuery(name = "Cliente.findByTel", query = "SELECT c FROM Cliente c WHERE c.tel = :tel"),
-    @NamedQuery(name = "Cliente.findByStatus", query = "SELECT c FROM Cliente c WHERE c.status = :status")})
+    @NamedQuery(name = "Cliente.findByTel", query = "SELECT c FROM Cliente c WHERE c.tel = :tel")})
 public class Cliente implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,24 +46,29 @@ public class Cliente implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_Clien")
     private Integer idClien;
-    @Size(max = 40)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 40)
     @Column(name = "nombre")
     private String nombre;
-    @Size(max = 40)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 40)
     @Column(name = "direccion")
     private String direccion;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 40)
     @Column(name = "tel")
-    private Integer tel;
-    @Column(name = "status")
-    private Boolean status;
+    private String tel;
     @JoinColumn(name = "id_Fis", referencedColumnName = "id_Fis")
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Fiscal idFis;
-    @OneToMany(mappedBy = "idClien")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idClien")
     private List<Venta> ventaList;
-    @OneToMany(mappedBy = "idClien")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idClien")
     private List<Sucursal> sucursalList;
-    @OneToMany(mappedBy = "idClien")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idClien")
     private List<Pedido> pedidoList;
 
     public Cliente() {
@@ -70,6 +76,13 @@ public class Cliente implements Serializable {
 
     public Cliente(Integer idClien) {
         this.idClien = idClien;
+    }
+
+    public Cliente(Integer idClien, String nombre, String direccion, String tel) {
+        this.idClien = idClien;
+        this.nombre = nombre;
+        this.direccion = direccion;
+        this.tel = tel;
     }
 
     public Integer getIdClien() {
@@ -96,20 +109,12 @@ public class Cliente implements Serializable {
         this.direccion = direccion;
     }
 
-    public Integer getTel() {
+    public String getTel() {
         return tel;
     }
 
-    public void setTel(Integer tel) {
+    public void setTel(String tel) {
         this.tel = tel;
-    }
-
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
     }
 
     public Fiscal getIdFis() {

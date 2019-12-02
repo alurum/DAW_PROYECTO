@@ -8,8 +8,9 @@
 <h1><i class="fa fa-users"></i>  Lista de roles</h1>   
 </div>      
 <div class="col-sm-1 col-md-1 col-lg-1">
-    <br><i class="fa fa-plus  fa-3x"  ></i> 
+    <br><i class="fa fa-plus  fa-3x"  onclick="location.href = 'agregar-rol'"></i> 
 </div>
+    
 </div>
 <br>
 <table  table id="users" class="table table-striped table-bordered" style="width:100%">

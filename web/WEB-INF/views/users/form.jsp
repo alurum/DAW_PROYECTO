@@ -14,13 +14,13 @@
                 <h5><strong>Información personal</h5></strong>
                 <div class="col-sm-3 col-md-3 col-lg-7">
                     <div class="form-group">
-                        <input class = "form-control"  type="text" id="nombre" name="nombre" value="${dato.nombre}"
+                        <input class = "form-control"  type="text" id="nombreUsuario" name="nombreUsuario" value="${dato.nombre}"
                                placeholder="Nombre completo" maxlength="20" required>					  
                     </div>
                 </div>	   
                 <div class="col-sm-3 col-md-3 col-lg-7">
                     <div class="form-group">
-                        <input class = "form-control"  type="text" id="direccion" name="direccion" value="${dato.direccion}"
+                        <input class = "form-control"  type="text" id="direccionAsociado" name="direccionAsociado" value="${dato.direccion}"
                                placeholder="Dirección" maxlength="30"> 
 
                     </div>

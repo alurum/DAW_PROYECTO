@@ -5,7 +5,6 @@
  */
 package controller.roles;
 
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
@@ -17,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.entities.Asociado;
-import model.entities.Asociado_;
 import model.entities.Rol;
 import model.sessions.AsociadoFacade;
 import model.sessions.RolFacade;
@@ -29,14 +27,12 @@ import model.sessions.RolFacade;
 @WebServlet(name = "CtlRoles", urlPatterns = {"/roles", "/editar-rol", "/agregar-rol", "/borrar-rol"})
 public class CtlRoles extends HttpServlet {
 
-    
     @EJB
     private RolFacade rF;
 
     @EJB
     private AsociadoFacade aF;
 
-    
     String url = "";
 
     /**
@@ -52,8 +48,8 @@ public class CtlRoles extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         if (session != null) {
-            url = request.getServletPath();  
-            Rol rol;
+            url = request.getServletPath();
+            Rol rol = new Rol();
             List<Rol> roles;
             List<Asociado> asociados;
             switch (url) {
@@ -63,27 +59,20 @@ public class CtlRoles extends HttpServlet {
                     request.setAttribute("roles", roles);
                     request.setAttribute("asociados", asociados);
                     request.setAttribute("usuario", session.getAttribute("SSusuario"));
-                    getServletContext().getRequestDispatcher("/WEB-INF/views/roles.jsp").forward(request, response);
+                    getServletContext().getRequestDispatcher("/WEB-INF/views/roles/roles.jsp").forward(request, response);
+                    break;
+                case "/agregar-rol":
+                    request.setAttribute("titulo", "Agregar rol");
+                    request.setAttribute("action", "agregar-rol");
+                    getServletContext().getRequestDispatcher("/WEB-INF/views/roles/form.jsp").forward(request, response);
                     break;
                 case "/editar-rol":
-                    rol = rF.find(request.getParameter("i"));                    
+                    rol = rF.find(Integer.parseInt(request.getParameter("i")));
                     request.setAttribute("titulo", "Editar rol " + rol.getNombre());
-                    request.setAttribute("action", "editar-rol");                    
+                    request.setAttribute("action", "editar-rol");
                     request.setAttribute("dato", rol);
-                    getServletContext().getRequestDispatcher("/WEB-INF/views/form.jsp").forward(request, response);
-                    break;
-                case "/agregar-rol":                    
-                    request.setAttribute("titulo", "Agregar rol");
-                    request.setAttribute("action", "agregar-rol");                    
-                    getServletContext().getRequestDispatcher("/WEB-INF/views/form.jsp").forward(request, response);
-                    break;
-               /** case "/profile":
-                    request.setAttribute("titulo", "Editar usuario " + session.getAttribute("SSusuario"));
-                    request.setAttribute("SSusuario", session.getAttribute("SSusuario"));
-                    request.setAttribute("SScontraseña", session.getAttribute("SScontraseña"));
-                    request.setAttribute("SSidAso", session.getAttribute("SSidAso"));
-                    getServletContext().getRequestDispatcher("/WEB-INF/views/profile.jsp").forward(request, response);
-                    break;**/
+                    getServletContext().getRequestDispatcher("/WEB-INF/views/roles/form.jsp").forward(request, response);
+                    break;                
             }
         } else {
             response.sendRedirect("http://localhost:30533/Maar/");
@@ -102,92 +91,56 @@ public class CtlRoles extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         url = request.getServletPath();
-        Asociado asociado = new Asociado();
+        PrintWriter out = response.getWriter();
         Rol rol = new Rol();
-        String resultado = "Error";   
+        Asociado asociado = new Asociado();
         response.setContentType("text/html;charset=UTF-8");
-       switch (url) {
-      /**       case "/agregar-usuario":                
+        switch (url) {
+            case "/agregar-rol":
                 try {
-                rol = rF.find(Integer.parseInt(request.getParameter("idRol").trim()));                
-                if (request.getParameter("password").equals(request.getParameter("Rpassword"))) {
-                        Asociado us = uF.findDuplicate(request.getParameter("usuario"));
-                        if (us.getUsuario().equals("disponible")) {
-                            asociado.setIdAso(0);
-                            asociado.setNombre(request.getParameter("nombre"));                            
-                            asociado.setSalario(Double.parseDouble(request.getParameter("salario").trim() + ".0"));                                                                                 
-                            asociado.setCelular(Integer.parseInt(request.getParameter("celular").trim()));
-                            asociado.setDireccion(request.getParameter("direccion"));
-                            asociado.setUsuario(request.getParameter("usuario"));
-                            asociado.setContraseña(getMD5(request.getParameter("password")));
-                            asociado.setIdRol(rol);
-                            uF.create(asociado);
-                            resultado = "Registro correcto";                                                 
-                        } else {
-                            resultado = "Usuario no disponible";                     
-                        }
+                    rol = rF.findDuplicate(request.getParameter("nombre"));
+                    if (rol.getNombre().equals("disponible")) {
+                        rol.setIdRol(0);
+                        rol.setNombre(request.getParameter("nombre"));
+                        rF.create(rol);
+                        out.print("Registro correcto");
                     } else {
-                        resultado = "Contraseñas diferentes";                     
+                        out.print("Rol no disponible");
                     }
-                      request.setAttribute("resultado", resultado);
-                try (PrintWriter out = response.getWriter()) {
-                    out.print(resultado);
-                }
-        } catch (Exception ex) {
-            Logger.getLogger(CtlLogin.class.getName()).log(Level.SEVERE, null, ex);                    
-                }
-                break;
-
-                
-                
-                
-            case "/editar-usuario":
-                rol = rF.find(Integer.parseInt(request.getParameter("idRol").trim()));
-                try {
-                    asociado = uF.find(parseInt((request.getParameter("idAso"))));
-                    if (request.getParameter("password").equals(request.getParameter("Rpassword"))) {
-                        Asociado us = uF.findDuplicateUpdate(request.getParameter("usuario"), asociado.getUsuario());
-                        if (us.getUsuario().equals("disponible")) {
-                            asociado.setNombre(request.getParameter("nombre"));
-                            asociado.setSalario(Double.parseDouble(request.getParameter("salario")));
-                            asociado.setCelular(Integer.parseInt(request.getParameter("celular")));
-                            asociado.setDireccion(request.getParameter("direccion"));
-                            asociado.setUsuario(request.getParameter("usuario"));
-                            asociado.setContraseña(getMD5(request.getParameter("password")));
-                            asociado.setIdRol(rol);
-                            uF.edit(asociado);
-                            resultado = "Registro correcto";
-                            response.sendRedirect("http://localhost:30533/Maar/usuarios");
-                        } else {
-                            resultado = "Usuario no disponible";
-                        }
-                    } else {
-                        resultado = "Contraseñas diferentes";
-                    }
-                    request.setAttribute("resultado", resultado);
                 } catch (Exception ex) {
-                    Logger.getLogger(CtlLogin.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println("xxxxxxxxxxxxxxxxSE HA PRODUCIDO EL SIGUIENTE ERROR:" + ex.getMessage() + "xxxxxxxxxxxxxxxx");
                 }
                 break;
-**/
-            case "/borrar-rol":                
-                rol = rF.find(request.getParameter("idRol"));
-                asociado = aF.findRoles(rol.getIdRol());                
-                if(asociado.getUsuario().equals("disponible")){
-                rF.remove(rol);               
-                resultado = "Registro correcto";                
-                } else {
-                resultado = "Error, este rol esta ligado a uno o mas usuarios.";                
-                }
-                request.setAttribute("resultado", resultado);
-                try (PrintWriter out = response.getWriter()) {
-                    out.print(resultado);
+                case "/editar-rol":
+                try {
+                    rol = rF.findDuplicate(request.getParameter("nombre"));
+                    if (rol.getNombre().equals("disponible")) {
+                        rol.setNombre(request.getParameter("nombre"));
+                        rF.create(rol);
+                        out.print("Registro correcto");
+                    } else {
+                        out.print("Rol no disponible");
+                    }
+                } catch (Exception ex) {
+                    System.out.println("xxxxxxxxxxxxxxxxSE HA PRODUCIDO EL SIGUIENTE ERROR:" + ex.getMessage() + "xxxxxxxxxxxxxxxx");
                 }
                 break;
-                
-            
+            case "/borrar-rol":
+                try {                    
+                    rol.setIdRol(Integer.parseInt(request.getParameter("idRol")));
+                    asociado = aF.findRol(Integer.parseInt(request.getParameter("idRol")));
+                    if (asociado.getUsuario().equals("disponible")) {
+                        rF.remove(rol);
+                        out.print("Registro correcto");
+                    } else {
+                        out.print("Error, este rol contiene usuarios ligados");
+                    }
+                } catch (Exception ex) {
+                    System.out.println("xxxxxxxxxxxxxxxxSE HA PRODUCIDO EL SIGUIENTE ERROR:" + ex.getMessage() + "xxxxxxxxxxxxxxxx");
+                }
+                break;                
             default:
-                    response.sendRedirect("http://localhost:30533/Maar/usuarios");
+                response.sendRedirect("http://localhost:30533/Maar/roles");
         }
     }
 

@@ -40,13 +40,13 @@ public class AsociadoFacade extends AbstractFacade<Asociado> {
     }
 
     public Asociado findByid_Aso(Integer id_Aso) {
-        Query query = em.createNativeQuery("select * from asociado where id_Aso like ?", Asociado.class);
+        Query query = em.createNativeQuery("select * from asociado where id_Aso = ?", Asociado.class);
         query.setParameter(1, id_Aso);
         return (Asociado) query.getSingleResult();
     }
 
     public Asociado findByUsuario(String usuario) {
-        Query query = em.createNativeQuery("select * from asociado where usuario like ?", Asociado.class);
+        Query query = em.createNativeQuery("select * from asociado where usuario = ?", Asociado.class);
         query.setParameter(1, usuario);
         return (Asociado) query.getSingleResult();
     }
@@ -60,7 +60,7 @@ public class AsociadoFacade extends AbstractFacade<Asociado> {
 
     public Asociado findDuplicate(String usuario) {
         Asociado asc = new Asociado();
-        Query query = em.createNativeQuery("select * from asociado where usuario like ?", Asociado.class);
+        Query query = em.createNativeQuery("select * from asociado where usuario = ?", Asociado.class);
         query.setParameter(1, usuario);        
         try {
            return (Asociado) query.getSingleResult();
@@ -86,7 +86,7 @@ public class AsociadoFacade extends AbstractFacade<Asociado> {
     
     
     
-    public Asociado findRoles(Integer idRol ) {
+    public Asociado findRol(Integer idRol ) {
         Asociado asc = new Asociado();
         Query query = em.createNativeQuery("select * from asociado where id_Rol = ? LIMIT 1;", Asociado.class);
         query.setParameter(1, idRol);                

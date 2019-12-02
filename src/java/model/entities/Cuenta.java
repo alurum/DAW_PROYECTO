@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -52,38 +53,68 @@ public class Cuenta implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_Cue")
     private Integer idCue;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "carga_e")
-    private Integer cargaE;
+    private int cargaE;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "carga_ce")
-    private Integer cargaCe;
+    private int cargaCe;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "carga_g")
-    private Integer cargaG;
+    private int cargaG;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "carga_cg")
-    private Integer cargaCg;
+    private int cargaCg;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "ticket_e")
-    private Integer ticketE;
+    private int ticketE;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "ticket_g")
-    private Integer ticketG;
+    private int ticketG;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "devo_de")
-    private Integer devoDe;
+    private int devoDe;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "devo_dg")
-    private Integer devoDg;
+    private int devoDg;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "tra_e")
-    private Integer traE;
+    private int traE;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "tra_g")
-    private Integer traG;
+    private int traG;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "total_p")
-    private Integer totalP;
+    private int totalP;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "gas")
-    private Integer gas;
+    private int gas;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "comida")
-    private Integer comida;
+    private int comida;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "otros")
-    private Integer otros;
+    private int otros;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "total_pp")
-    private Integer totalPp;
+    private int totalPp;
     @JoinColumn(name = "id_Aso", referencedColumnName = "id_Aso")
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Asociado idAso;
 
     public Cuenta() {
@@ -91,6 +122,25 @@ public class Cuenta implements Serializable {
 
     public Cuenta(Integer idCue) {
         this.idCue = idCue;
+    }
+
+    public Cuenta(Integer idCue, int cargaE, int cargaCe, int cargaG, int cargaCg, int ticketE, int ticketG, int devoDe, int devoDg, int traE, int traG, int totalP, int gas, int comida, int otros, int totalPp) {
+        this.idCue = idCue;
+        this.cargaE = cargaE;
+        this.cargaCe = cargaCe;
+        this.cargaG = cargaG;
+        this.cargaCg = cargaCg;
+        this.ticketE = ticketE;
+        this.ticketG = ticketG;
+        this.devoDe = devoDe;
+        this.devoDg = devoDg;
+        this.traE = traE;
+        this.traG = traG;
+        this.totalP = totalP;
+        this.gas = gas;
+        this.comida = comida;
+        this.otros = otros;
+        this.totalPp = totalPp;
     }
 
     public Integer getIdCue() {
@@ -101,123 +151,123 @@ public class Cuenta implements Serializable {
         this.idCue = idCue;
     }
 
-    public Integer getCargaE() {
+    public int getCargaE() {
         return cargaE;
     }
 
-    public void setCargaE(Integer cargaE) {
+    public void setCargaE(int cargaE) {
         this.cargaE = cargaE;
     }
 
-    public Integer getCargaCe() {
+    public int getCargaCe() {
         return cargaCe;
     }
 
-    public void setCargaCe(Integer cargaCe) {
+    public void setCargaCe(int cargaCe) {
         this.cargaCe = cargaCe;
     }
 
-    public Integer getCargaG() {
+    public int getCargaG() {
         return cargaG;
     }
 
-    public void setCargaG(Integer cargaG) {
+    public void setCargaG(int cargaG) {
         this.cargaG = cargaG;
     }
 
-    public Integer getCargaCg() {
+    public int getCargaCg() {
         return cargaCg;
     }
 
-    public void setCargaCg(Integer cargaCg) {
+    public void setCargaCg(int cargaCg) {
         this.cargaCg = cargaCg;
     }
 
-    public Integer getTicketE() {
+    public int getTicketE() {
         return ticketE;
     }
 
-    public void setTicketE(Integer ticketE) {
+    public void setTicketE(int ticketE) {
         this.ticketE = ticketE;
     }
 
-    public Integer getTicketG() {
+    public int getTicketG() {
         return ticketG;
     }
 
-    public void setTicketG(Integer ticketG) {
+    public void setTicketG(int ticketG) {
         this.ticketG = ticketG;
     }
 
-    public Integer getDevoDe() {
+    public int getDevoDe() {
         return devoDe;
     }
 
-    public void setDevoDe(Integer devoDe) {
+    public void setDevoDe(int devoDe) {
         this.devoDe = devoDe;
     }
 
-    public Integer getDevoDg() {
+    public int getDevoDg() {
         return devoDg;
     }
 
-    public void setDevoDg(Integer devoDg) {
+    public void setDevoDg(int devoDg) {
         this.devoDg = devoDg;
     }
 
-    public Integer getTraE() {
+    public int getTraE() {
         return traE;
     }
 
-    public void setTraE(Integer traE) {
+    public void setTraE(int traE) {
         this.traE = traE;
     }
 
-    public Integer getTraG() {
+    public int getTraG() {
         return traG;
     }
 
-    public void setTraG(Integer traG) {
+    public void setTraG(int traG) {
         this.traG = traG;
     }
 
-    public Integer getTotalP() {
+    public int getTotalP() {
         return totalP;
     }
 
-    public void setTotalP(Integer totalP) {
+    public void setTotalP(int totalP) {
         this.totalP = totalP;
     }
 
-    public Integer getGas() {
+    public int getGas() {
         return gas;
     }
 
-    public void setGas(Integer gas) {
+    public void setGas(int gas) {
         this.gas = gas;
     }
 
-    public Integer getComida() {
+    public int getComida() {
         return comida;
     }
 
-    public void setComida(Integer comida) {
+    public void setComida(int comida) {
         this.comida = comida;
     }
 
-    public Integer getOtros() {
+    public int getOtros() {
         return otros;
     }
 
-    public void setOtros(Integer otros) {
+    public void setOtros(int otros) {
         this.otros = otros;
     }
 
-    public Integer getTotalPp() {
+    public int getTotalPp() {
         return totalPp;
     }
 
-    public void setTotalPp(Integer totalPp) {
+    public void setTotalPp(int totalPp) {
         this.totalPp = totalPp;
     }
 

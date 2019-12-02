@@ -35,12 +35,12 @@ jQuery(document).ready(function ($) {
     $("#registrar").click(function () {
         var action = document.getElementById("action").value;
         var idAso = document.getElementById("idAso").value;
-        var nombre = document.getElementById("nombre").value;
+        var nombre = document.getElementById("nombreUsuario").value;
         var salario = document.getElementById("salario").value;
         var password = document.getElementById("password").value;
         var Rpassword = document.getElementById("Rpassword").value;
         var celular = document.getElementById("celular").value;
-        var direccion = document.getElementById("direccion").value;
+        var direccion = document.getElementById("direccionAsociado").value;
         var usuario = document.getElementById("usuario").value;
         var idRol = document.getElementById("idRol").value;
         $.ajax({

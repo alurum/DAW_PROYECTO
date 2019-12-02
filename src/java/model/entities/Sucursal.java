@@ -6,7 +6,9 @@
 package model.entities;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,9 +18,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -29,47 +34,59 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Sucursal.findAll", query = "SELECT s FROM Sucursal s"),
-    @NamedQuery(name = "Sucursal.findByIdPed", query = "SELECT s FROM Sucursal s WHERE s.idPed = :idPed"),
+    @NamedQuery(name = "Sucursal.findByIdSuc", query = "SELECT s FROM Sucursal s WHERE s.idSuc = :idSuc"),
     @NamedQuery(name = "Sucursal.findByNombre", query = "SELECT s FROM Sucursal s WHERE s.nombre = :nombre"),
     @NamedQuery(name = "Sucursal.findByDireccion", query = "SELECT s FROM Sucursal s WHERE s.direccion = :direccion"),
-    @NamedQuery(name = "Sucursal.findByNotienda", query = "SELECT s FROM Sucursal s WHERE s.notienda = :notienda"),
-    @NamedQuery(name = "Sucursal.findByStatus", query = "SELECT s FROM Sucursal s WHERE s.status = :status")})
+    @NamedQuery(name = "Sucursal.findByNotienda", query = "SELECT s FROM Sucursal s WHERE s.notienda = :notienda")})
 public class Sucursal implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id_Ped")
-    private Integer idPed;
-    @Size(max = 40)
+    @Column(name = "id_suc")
+    private Integer idSuc;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 40)
     @Column(name = "nombre")
     private String nombre;
-    @Size(max = 40)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 40)
     @Column(name = "direccion")
     private String direccion;
-    @Size(max = 40)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 40)
     @Column(name = "No_tienda")
     private String notienda;
-    @Column(name = "status")
-    private Boolean status;
     @JoinColumn(name = "id_Clien", referencedColumnName = "id_Clien")
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Cliente idClien;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idSuc")
+    private List<Pedido> pedidoList;
 
     public Sucursal() {
     }
 
-    public Sucursal(Integer idPed) {
-        this.idPed = idPed;
+    public Sucursal(Integer idSuc) {
+        this.idSuc = idSuc;
     }
 
-    public Integer getIdPed() {
-        return idPed;
+    public Sucursal(Integer idSuc, String nombre, String direccion, String notienda) {
+        this.idSuc = idSuc;
+        this.nombre = nombre;
+        this.direccion = direccion;
+        this.notienda = notienda;
     }
 
-    public void setIdPed(Integer idPed) {
-        this.idPed = idPed;
+    public Integer getIdSuc() {
+        return idSuc;
+    }
+
+    public void setIdSuc(Integer idSuc) {
+        this.idSuc = idSuc;
     }
 
     public String getNombre() {
@@ -96,14 +113,6 @@ public class Sucursal implements Serializable {
         this.notienda = notienda;
     }
 
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
-
     public Cliente getIdClien() {
         return idClien;
     }
@@ -112,10 +121,19 @@ public class Sucursal implements Serializable {
         this.idClien = idClien;
     }
 
+    @XmlTransient
+    public List<Pedido> getPedidoList() {
+        return pedidoList;
+    }
+
+    public void setPedidoList(List<Pedido> pedidoList) {
+        this.pedidoList = pedidoList;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idPed != null ? idPed.hashCode() : 0);
+        hash += (idSuc != null ? idSuc.hashCode() : 0);
         return hash;
     }
 
@@ -126,7 +144,7 @@ public class Sucursal implements Serializable {
             return false;
         }
         Sucursal other = (Sucursal) object;
-        if ((this.idPed == null && other.idPed != null) || (this.idPed != null && !this.idPed.equals(other.idPed))) {
+        if ((this.idSuc == null && other.idSuc != null) || (this.idSuc != null && !this.idSuc.equals(other.idSuc))) {
             return false;
         }
         return true;
@@ -134,7 +152,7 @@ public class Sucursal implements Serializable {
 
     @Override
     public String toString() {
-        return "model.entities.Sucursal[ idPed=" + idPed + " ]";
+        return "model.entities.Sucursal[ idSuc=" + idSuc + " ]";
     }
     
 }

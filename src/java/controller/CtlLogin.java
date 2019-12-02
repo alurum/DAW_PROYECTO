@@ -118,7 +118,7 @@ public class CtlLogin extends HttpServlet {
                         usr.setIdAso(0);
                         usr.setNombre(request.getParameter("nombre"));
                         usr.setSalario(0.00);
-                        usr.setCelular(Integer.parseInt(request.getParameter("celular")));
+                        usr.setCelular(request.getParameter("celular"));
                         usr.setDireccion(request.getParameter("direccion"));
                         usr.setUsuario(request.getParameter("Rusuario"));
                         usr.setContraseña(contraseña);

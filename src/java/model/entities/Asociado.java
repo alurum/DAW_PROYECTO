@@ -8,6 +8,7 @@ package model.entities;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,6 +20,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -37,7 +39,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Asociado.findBySalario", query = "SELECT a FROM Asociado a WHERE a.salario = :salario"),
     @NamedQuery(name = "Asociado.findByCelular", query = "SELECT a FROM Asociado a WHERE a.celular = :celular"),
     @NamedQuery(name = "Asociado.findByDireccion", query = "SELECT a FROM Asociado a WHERE a.direccion = :direccion"),
-    @NamedQuery(name = "Asociado.findByUsuario", query = "SELECT a FROM Asociado a WHERE a.usuario = :usuario")})
+    @NamedQuery(name = "Asociado.findByUsuario", query = "SELECT a FROM Asociado a WHERE a.usuario = :usuario"),
+    @NamedQuery(name = "Asociado.findByContrase\u00f1a", query = "SELECT a FROM Asociado a WHERE a.contrase\u00f1a = :contrase\u00f1a")})
 public class Asociado implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -46,29 +49,41 @@ public class Asociado implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_Aso")
     private Integer idAso;
-    @Size(max = 40)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 40)
     @Column(name = "nombre")
     private String nombre;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "salario")
-    private Double salario;
+    private double salario;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 40)
     @Column(name = "celular")
-    private Integer celular;
-    @Size(max = 40)
+    private String celular;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 40)
     @Column(name = "direccion")
     private String direccion;
-    @Size(max = 40)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 40)
     @Column(name = "usuario")
     private String usuario;
-    @Size(max = 40)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 40)
     @Column(name = "contrase\u00f1a")
     private String contraseña;
-    @OneToMany(mappedBy = "idAso")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idAso")
     private List<Venta> ventaList;
     @JoinColumn(name = "id_Rol", referencedColumnName = "id_Rol")
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Rol idRol;
-    @OneToMany(mappedBy = "idAso")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idAso")
     private List<Cuenta> cuentaList;
 
     public Asociado() {
@@ -76,6 +91,16 @@ public class Asociado implements Serializable {
 
     public Asociado(Integer idAso) {
         this.idAso = idAso;
+    }
+
+    public Asociado(Integer idAso, String nombre, double salario, String celular, String direccion, String usuario, String contraseña) {
+        this.idAso = idAso;
+        this.nombre = nombre;
+        this.salario = salario;
+        this.celular = celular;
+        this.direccion = direccion;
+        this.usuario = usuario;
+        this.contraseña = contraseña;
     }
 
     public Integer getIdAso() {
@@ -94,19 +119,19 @@ public class Asociado implements Serializable {
         this.nombre = nombre;
     }
 
-    public Double getSalario() {
+    public double getSalario() {
         return salario;
     }
 
-    public void setSalario(Double salario) {
+    public void setSalario(double salario) {
         this.salario = salario;
     }
 
-    public Integer getCelular() {
+    public String getCelular() {
         return celular;
     }
 
-    public void setCelular(Integer celular) {
+    public void setCelular(String celular) {
         this.celular = celular;
     }
 

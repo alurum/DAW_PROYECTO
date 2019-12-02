@@ -20,6 +20,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -44,19 +45,28 @@ public class Venta implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_Ven")
     private Integer idVen;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "devolucione")
-    private Integer devolucione;
+    private int devolucione;
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "fecha")
     @Temporal(TemporalType.DATE)
     private Date fecha;
-    @Size(max = 40)
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 40)
     @Column(name = "modo_pago")
     private String modoPago;
+    @JoinColumn(name = "id_Ped", referencedColumnName = "id_Ped")
+    @ManyToOne(optional = false)
+    private Pedido idPed;
     @JoinColumn(name = "id_Clien", referencedColumnName = "id_Clien")
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Cliente idClien;
     @JoinColumn(name = "id_Aso", referencedColumnName = "id_Aso")
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Asociado idAso;
 
     public Venta() {
@@ -64,6 +74,13 @@ public class Venta implements Serializable {
 
     public Venta(Integer idVen) {
         this.idVen = idVen;
+    }
+
+    public Venta(Integer idVen, int devolucione, Date fecha, String modoPago) {
+        this.idVen = idVen;
+        this.devolucione = devolucione;
+        this.fecha = fecha;
+        this.modoPago = modoPago;
     }
 
     public Integer getIdVen() {
@@ -74,11 +91,11 @@ public class Venta implements Serializable {
         this.idVen = idVen;
     }
 
-    public Integer getDevolucione() {
+    public int getDevolucione() {
         return devolucione;
     }
 
-    public void setDevolucione(Integer devolucione) {
+    public void setDevolucione(int devolucione) {
         this.devolucione = devolucione;
     }
 
@@ -96,6 +113,14 @@ public class Venta implements Serializable {
 
     public void setModoPago(String modoPago) {
         this.modoPago = modoPago;
+    }
+
+    public Pedido getIdPed() {
+        return idPed;
+    }
+
+    public void setIdPed(Pedido idPed) {
+        this.idPed = idPed;
     }
 
     public Cliente getIdClien() {

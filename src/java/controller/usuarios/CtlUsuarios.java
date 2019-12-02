@@ -53,11 +53,18 @@ public class CtlUsuarios extends HttpServlet {
             Asociado usuario;
             List<Rol> roles;
             switch (url) {
-                case "/usuarios":                    
+                case "/usuarios":
                     List<Asociado> asociados = uF.findAllExcept((String) session.getAttribute("SSusuario"));
                     request.setAttribute("datos", asociados);
                     request.setAttribute("usuario", session.getAttribute("SSusuario"));
                     getServletContext().getRequestDispatcher("/WEB-INF/views/users/usuarios.jsp").forward(request, response);
+                    break;
+                case "/agregar-usuario":
+                    roles = rF.findAll();
+                    request.setAttribute("titulo", "Agregar usuario");
+                    request.setAttribute("action", "agregar-usuario");
+                    request.setAttribute("roles", roles);
+                    getServletContext().getRequestDispatcher("/WEB-INF/views/users/form.jsp").forward(request, response);
                     break;
                 case "/editar-usuario":
                     usuario = uF.findByUsuario(request.getParameter("i"));
@@ -66,13 +73,6 @@ public class CtlUsuarios extends HttpServlet {
                     request.setAttribute("action", "editar-usuario");
                     request.setAttribute("roles", roles);
                     request.setAttribute("dato", usuario);
-                    getServletContext().getRequestDispatcher("/WEB-INF/views/users/form.jsp").forward(request, response);
-                    break;
-                case "/agregar-usuario":
-                    roles = rF.findAll();
-                    request.setAttribute("titulo", "Agregar usuario");
-                    request.setAttribute("action", "agregar-usuario");
-                    request.setAttribute("roles", roles);
                     getServletContext().getRequestDispatcher("/WEB-INF/views/users/form.jsp").forward(request, response);
                     break;
                 case "/profile":
@@ -112,12 +112,12 @@ public class CtlUsuarios extends HttpServlet {
                         if (us.getUsuario().equals("disponible")) {
                             asociado.setIdAso(0);
                             asociado.setNombre(request.getParameter("nombre"));
-                            asociado.setSalario(Double.parseDouble(request.getParameter("salario").trim() + ".0"));
-                            asociado.setCelular(Integer.parseInt(request.getParameter("celular").trim()));
+                            asociado.setSalario(Double.parseDouble(request.getParameter("salario") + ".0"));
+                            asociado.setCelular(request.getParameter("celular").trim());
                             asociado.setDireccion(request.getParameter("direccion"));
                             asociado.setUsuario(request.getParameter("usuario"));
                             asociado.setContraseña(getMD5(request.getParameter("password")));
-                            asociado.setIdRol(rF.find(Integer.parseInt(request.getParameter("idRol").trim())));
+                            asociado.setIdRol(rF.find(Integer.parseInt(request.getParameter("idRol"))));
                             uF.create(asociado);
                             out.print("Registro correcto");
                         } else {
@@ -130,10 +130,9 @@ public class CtlUsuarios extends HttpServlet {
                     System.out.println("xxxxxxxxxxxxxxxxSE HA PRODUCIDO EL SIGUIENTE ERROR:" + ex.getMessage() + "xxxxxxxxxxxxxxxx");
                 }
                 break;
-
             case "/editar-usuario":
                 try {
-                    rol = rF.find(Integer.parseInt(request.getParameter("idRol").trim()));
+                    rol = rF.find(Integer.parseInt(request.getParameter("idRol")));
                     asociado = uF.find(parseInt((request.getParameter("idAso"))));
                     if ((asociado.getContraseña().equals(getMD5(request.getParameter("password"))) && asociado.getContraseña().equals(getMD5(request.getParameter("Rpassword")))) || (request.getParameter("password").equals(request.getParameter("Rpassword")))) {
                         Asociado us = uF.findDuplicateUpdate(request.getParameter("usuario"), asociado.getUsuario());
@@ -145,7 +144,7 @@ public class CtlUsuarios extends HttpServlet {
                             }
                             asociado.setNombre(request.getParameter("nombre"));
                             asociado.setSalario(Double.parseDouble(request.getParameter("salario")));
-                            asociado.setCelular(Integer.parseInt(request.getParameter("celular")));
+                            asociado.setCelular(request.getParameter("celular"));
                             asociado.setDireccion(request.getParameter("direccion"));
                             asociado.setUsuario(request.getParameter("usuario"));
                             asociado.setIdRol(rol);
@@ -161,7 +160,6 @@ public class CtlUsuarios extends HttpServlet {
                     System.out.println("xxxxxxxxxxxxxxxxSE HA PRODUCIDO EL SIGUIENTE ERROR:" + ex.getMessage() + "xxxxxxxxxxxxxxxx");
                 }
                 break;
-
             case "/borrar-usuario":
                 try {
                     asociado = uF.findByUsuario(request.getParameter("usuario"));
@@ -175,7 +173,6 @@ public class CtlUsuarios extends HttpServlet {
                     System.out.println("xxxxxxxxxxxxxxxxSE HA PRODUCIDO EL SIGUIENTE ERROR:" + ex.getMessage() + "xxxxxxxxxxxxxxxx");
                 }
                 break;
-
             case "/profile":
                 try {
                     asociado = uF.find(parseInt((request.getParameter("SSidAso"))));
