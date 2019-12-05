@@ -10,7 +10,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import model.entities.Asociado;
 import model.entities.Sucursal;
 
 /**
@@ -59,5 +58,31 @@ public class SucursalFacade extends AbstractFacade<Sucursal> {
         }                         
     }
     
+    
+     public Sucursal findSucursal(Integer idClien) {
+    Sucursal sucursal = new Sucursal();
+        Query query = em.createNativeQuery("select * from sucursal where id_Clien = ? LIMIT 1", Sucursal.class);
+        query.setParameter(1, idClien);                
+        try {
+           return (Sucursal) query.getSingleResult();
+        } catch (NoResultException nre) {
+            sucursal.setNombre("disponible");
+            return sucursal;                                    
+        }                         
+    }
+    
+    public void Insert(Sucursal sucursal) {
+        Sucursal persistance = new Sucursal();
+        em.persist(persistance);
+        persistance.setIdSuc(sucursal.getIdSuc());
+        persistance.setNombre(sucursal.getNombre());
+        persistance.setDireccion(sucursal.getDireccion());
+        persistance.setNotienda(sucursal.getNotienda());
+        persistance.setIdClien(sucursal.getIdClien());
+    }   
+    
+    public void Update(Sucursal sucursal) {                
+        em.merge(sucursal);        
+    }
     
 }

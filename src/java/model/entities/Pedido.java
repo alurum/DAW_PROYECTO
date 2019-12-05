@@ -8,7 +8,6 @@ package model.entities;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,7 +19,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -46,30 +44,24 @@ public class Pedido implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_Ped")
     private Integer idPed;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "cantidad")
-    private int cantidad;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 40)
+    private Integer cantidad;
+    @Size(max = 40)
     @Column(name = "direccion")
     private String direccion;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 40)
+    @Size(max = 40)
     @Column(name = "comentario")
     private String comentario;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPed")
+    @OneToMany(mappedBy = "idPed")
     private List<Venta> ventaList;
     @JoinColumn(name = "id_suc", referencedColumnName = "id_suc")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Sucursal idSuc;
     @JoinColumn(name = "id_Clien", referencedColumnName = "id_Clien")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Cliente idClien;
     @JoinColumn(name = "id_Pro", referencedColumnName = "id_Pro")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Producto idPro;
 
     public Pedido() {
@@ -77,13 +69,6 @@ public class Pedido implements Serializable {
 
     public Pedido(Integer idPed) {
         this.idPed = idPed;
-    }
-
-    public Pedido(Integer idPed, int cantidad, String direccion, String comentario) {
-        this.idPed = idPed;
-        this.cantidad = cantidad;
-        this.direccion = direccion;
-        this.comentario = comentario;
     }
 
     public Integer getIdPed() {
@@ -94,11 +79,11 @@ public class Pedido implements Serializable {
         this.idPed = idPed;
     }
 
-    public int getCantidad() {
+    public Integer getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(int cantidad) {
+    public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
     }
 

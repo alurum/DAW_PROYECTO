@@ -8,7 +8,6 @@ package model.entities;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,7 +19,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -46,25 +44,19 @@ public class Sucursal implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_suc")
     private Integer idSuc;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 40)
+    @Size(max = 40)
     @Column(name = "nombre")
     private String nombre;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 40)
+    @Size(max = 40)
     @Column(name = "direccion")
     private String direccion;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 40)
+    @Size(max = 40)
     @Column(name = "No_tienda")
     private String notienda;
     @JoinColumn(name = "id_Clien", referencedColumnName = "id_Clien")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Cliente idClien;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idSuc")
+    @OneToMany(mappedBy = "idSuc")
     private List<Pedido> pedidoList;
 
     public Sucursal() {
@@ -72,13 +64,6 @@ public class Sucursal implements Serializable {
 
     public Sucursal(Integer idSuc) {
         this.idSuc = idSuc;
-    }
-
-    public Sucursal(Integer idSuc, String nombre, String direccion, String notienda) {
-        this.idSuc = idSuc;
-        this.nombre = nombre;
-        this.direccion = direccion;
-        this.notienda = notienda;
     }
 
     public Integer getIdSuc() {

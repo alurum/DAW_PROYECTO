@@ -1,68 +1,69 @@
-   
-    
- function dropSucursal(idSuc) {
-        if (confirm("¿Seguro que deseas realizar esta accion?")) {
-            txt = "You pressed OK!";
-            $.ajax({
-                url: 'borrar-sucursal',
-                type: "POST",
-                data: {idSuc: idSuc},
-                success: function (resultado) {
-                    location.reload();
-                    alert(resultado);
-                },
-                error: function (resultado) {
-                    alert("Algo salio mal, intente nuevamente");
-                }
-            });
 
-        }
+function dropSucursal(idSuc) {
+    if (confirm("\u00bfSeguro que deseas realizar esta acci\u00f3n?")) {
+        txt = "You pressed OK!";
+        $.ajax({
+            url: 'borrar-sucursal',
+            type: "POST",
+            dataType: 'text',
+            data: {idSuc: idSuc},
+            success: function (resultado) {
+                switch (resultado) {
+                    case "Registro correcto":
+                        location.reload();
+                        alert(resultado);
+                        break;
+                    case "Error, la sucursal contiene pedidos ligados":
+                        alert(resultado);
+                        break;
+                    default :
+                        location.reload();
+                }
+            },
+            error: function (resultado) {
+                alert("Algo salió mal, intentelo nuevamente");
+            }
+        });
 
     }
 
+}
 
 
 
-
-    jQuery(document).ready(function ($) {
-
-        $("#registrarSucursal").click(function () {
-            var action = document.getElementById("action").value;
-            var idSuc = document.getElementById("idSuc").value;
-            var nombre = document.getElementById("nombreSucursal").value;
-            var direccion = document.getElementById("direccionSucursal").value;
-            var notienda = document.getElementById("notienda").value;
-            var idClien = document.getElementById("idClien").value;
-            $.ajax({
-                url: action,
-                type: 'POST',
-                data: {idSuc: idSuc, nombre: nombre, direccion: direccion, notienda: notienda, idClien: idClien},
-                success: function (resultado) {
-                    switch (resultado) {
-                        case "Registro correcto":
-                            location.href = 'http://localhost:30533/Maar/sucursales';
-                            alert(resultado);
-                            break;
-                        case "Dirección de sucursal no disponible":
-                            location.reload();
-                            alert(resultado);
-                            break;
-                            defaul:
-                                    location.reload();
-                    }
-                },
-                error: function (resultado) {
+function registrarSucursal() {    
+    $.ajax({        
+        type: 'POST',
+        data: $("#formSucursal").serialize(),
+        success: function (resultado) {
+            switch (resultado) {
+                case "Registro correcto":
+                    location.href = 'http://localhost:30533/Maar/sucursales';
+                    alert(resultado);
+                    break;
+                case "Sucursal no disponible":
                     location.reload();
-                    alert("Algo salio mal, intente nuevamente");
-                }
-
-            });
-
-        });
-
-
-
-
+                    alert(resultado);
+                    break;
+                    defaul:
+                            location.reload();
+            }
+        },
+        error: function (resultado) {
+            location.reload();
+            alert("Algo salió mal, intentelo nuevamente");
+        }
 
     });
+
+}
+
+
+
+
+
+
+jQuery(document).ready(function ($) {
+
+});
 

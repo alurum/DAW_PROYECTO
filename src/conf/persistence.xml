@@ -3,6 +3,9 @@
   <persistence-unit name="MaarPU" transaction-type="JTA">
     <jta-data-source>java:app/Example</jta-data-source>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <properties/>
+    <validation-mode>NONE</validation-mode>
+    <properties>
+      <property name="javax.persistence.schema-generation.database.action" value="create"/>
+    </properties>
   </persistence-unit>
 </persistence>

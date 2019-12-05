@@ -3,12 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller.usuarios;
+package controller.asociados;
 
 import static controller.CtlLogin.getMD5;
 import java.io.IOException;
 import java.io.PrintWriter;
-import static java.lang.Integer.parseInt;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -21,21 +20,23 @@ import model.entities.Asociado;
 import model.entities.Rol;
 import model.sessions.AsociadoFacade;
 import model.sessions.RolFacade;
+import static java.lang.Integer.parseInt;
 
 /**
  *
  * @author Lalo
  */
-@WebServlet(name = "CtlUsuarios", urlPatterns = {"/usuarios", "/editar-usuario", "/agregar-usuario", "/borrar-usuario", "/profile"})
-public class CtlUsuarios extends HttpServlet {
+@WebServlet(name = "CtlAsociados", urlPatterns = {"/asociados", "/editar-asociado", "/agregar-asociado", "/borrar-asociado", "/profile"})
+public class CtlAsociados extends HttpServlet {
 
     @EJB
-    private AsociadoFacade uF;
+    private AsociadoFacade aF;
     @EJB
     private RolFacade rF;
 
     String url = "";
-
+    
+    
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -50,29 +51,29 @@ public class CtlUsuarios extends HttpServlet {
         HttpSession session = request.getSession(false);
         if (session != null) {
             url = request.getServletPath();
-            Asociado usuario;
+            Asociado asociado;
             List<Rol> roles;
             switch (url) {
-                case "/usuarios":
-                    List<Asociado> asociados = uF.findAllExcept((String) session.getAttribute("SSusuario"));
-                    request.setAttribute("datos", asociados);
+                case "/asociados":                       
+                    List<Asociado> asociados = aF.findAllExcept((String) session.getAttribute("SSusuario"));
+                    request.setAttribute("asociados", asociados);
                     request.setAttribute("usuario", session.getAttribute("SSusuario"));
                     getServletContext().getRequestDispatcher("/WEB-INF/views/users/usuarios.jsp").forward(request, response);
                     break;
-                case "/agregar-usuario":
+                case "/agregar-asociado":
                     roles = rF.findAll();
                     request.setAttribute("titulo", "Agregar usuario");
-                    request.setAttribute("action", "agregar-usuario");
+                    request.setAttribute("action", "agregar-asociado");
                     request.setAttribute("roles", roles);
                     getServletContext().getRequestDispatcher("/WEB-INF/views/users/form.jsp").forward(request, response);
                     break;
-                case "/editar-usuario":
-                    usuario = uF.findByUsuario(request.getParameter("i"));
+                case "/editar-asociado":
+                    asociado = aF.findByUsuario(request.getParameter("i"));
                     roles = rF.findAll();
-                    request.setAttribute("titulo", "Editar usuario " + usuario.getUsuario());
-                    request.setAttribute("action", "editar-usuario");
+                    request.setAttribute("titulo", "Editar usuario " + asociado.getUsuario());
+                    request.setAttribute("action", "editar-asociado");
                     request.setAttribute("roles", roles);
-                    request.setAttribute("dato", usuario);
+                    request.setAttribute("asociado", asociado);
                     getServletContext().getRequestDispatcher("/WEB-INF/views/users/form.jsp").forward(request, response);
                     break;
                 case "/profile":
@@ -105,50 +106,50 @@ public class CtlUsuarios extends HttpServlet {
         Rol rol = new Rol();
         response.setContentType("text/html;charset=UTF-8");
         switch (url) {
-            case "/agregar-usuario":
+            case "/agregar-asociado":
                 try {
-                    if (request.getParameter("password").equals(request.getParameter("Rpassword"))) {
-                        Asociado us = uF.findDuplicate(request.getParameter("usuario"));
-                        if (us.getUsuario().equals("disponible")) {
+                    if (request.getParameter("password").equals(request.getParameter("Rpassword"))) {                        
+                        Asociado duplicate = aF.findDuplicate(request.getParameter("usuario"));
+                        if (duplicate.getUsuario().equals("disponible")) {
                             asociado.setIdAso(0);
-                            asociado.setNombre(request.getParameter("nombre"));
+                            asociado.setNombre(request.getParameter("nombreUsuario"));
                             asociado.setSalario(Double.parseDouble(request.getParameter("salario") + ".0"));
-                            asociado.setCelular(request.getParameter("celular").trim());
-                            asociado.setDireccion(request.getParameter("direccion"));
+                            asociado.setCelular(request.getParameter("celular"));
+                            asociado.setDireccion(request.getParameter("direccionAsociado"));
                             asociado.setUsuario(request.getParameter("usuario"));
                             asociado.setContraseña(getMD5(request.getParameter("password")));
                             asociado.setIdRol(rF.find(Integer.parseInt(request.getParameter("idRol"))));
-                            uF.create(asociado);
-                            out.print("Registro correcto");
+                            aF.Insert(asociado);
+                            out.print("Registro correcto");                               
                         } else {
-                            out.print("Usuario no disponible");
+                            out.print("Usuario no disponible");                                                      
                         }
                     } else {
                         out.print("Passwords diferentes");
                     }
                 } catch (Exception ex) {
                     System.out.println("xxxxxxxxxxxxxxxxSE HA PRODUCIDO EL SIGUIENTE ERROR:" + ex.getMessage() + "xxxxxxxxxxxxxxxx");
+                    response.sendRedirect("http://localhost:30533/Maar/agregar-asociado");
                 }
                 break;
-            case "/editar-usuario":
-                try {
-                    rol = rF.find(Integer.parseInt(request.getParameter("idRol")));
-                    asociado = uF.find(parseInt((request.getParameter("idAso"))));
-                    if ((asociado.getContraseña().equals(getMD5(request.getParameter("password"))) && asociado.getContraseña().equals(getMD5(request.getParameter("Rpassword")))) || (request.getParameter("password").equals(request.getParameter("Rpassword")))) {
-                        Asociado us = uF.findDuplicateUpdate(request.getParameter("usuario"), asociado.getUsuario());
+            case "/editar-asociado":
+                try {                        
+                    Asociado aso = aF.find(parseInt(request.getParameter("idAso")));
+                    if ((aso.getContraseña().equals(getMD5(request.getParameter("password"))) && aso.getContraseña().equals(getMD5(request.getParameter("Rpassword")))) || (request.getParameter("password").equals(request.getParameter("Rpassword")))) {                        
+                        Asociado  us = aF.findDuplicateUpdate(request.getParameter("usuario"), aso.getUsuario());
                         if (us.getUsuario().equals("disponible")) {
-                            if (asociado.getContraseña().equals(getMD5(request.getParameter("password"))) && asociado.getContraseña().equals(getMD5(request.getParameter("Rpassword")))) {
-                                asociado.setContraseña((request.getParameter("password")));
+                            if (aso.getContraseña().equals(getMD5(request.getParameter("password"))) && aso.getContraseña().equals(getMD5(request.getParameter("Rpassword")))) {
+                                aso.setContraseña((request.getParameter("password")));
                             } else {
-                                asociado.setContraseña(getMD5(request.getParameter("password")));
+                                aso.setContraseña(getMD5(request.getParameter("password")));
                             }
-                            asociado.setNombre(request.getParameter("nombre"));
-                            asociado.setSalario(Double.parseDouble(request.getParameter("salario")));
-                            asociado.setCelular(request.getParameter("celular"));
-                            asociado.setDireccion(request.getParameter("direccion"));
-                            asociado.setUsuario(request.getParameter("usuario"));
-                            asociado.setIdRol(rol);
-                            uF.edit(asociado);
+                            aso.setNombre(request.getParameter("nombreUsuario"));
+                            aso.setSalario(Double.parseDouble(request.getParameter("salario")));
+                            aso.setCelular(request.getParameter("celular"));
+                            aso.setDireccion(request.getParameter("direccionAsociado"));
+                            aso.setUsuario(request.getParameter("usuario"));
+                            aso.setIdRol(rF.find(Integer.parseInt(request.getParameter("idRol"))));
+                            aF.Update(aso);
                             out.print("Registro correcto");
                         } else {
                             out.print("Usuario no disponible");
@@ -158,34 +159,35 @@ public class CtlUsuarios extends HttpServlet {
                     }
                 } catch (Exception ex) {
                     System.out.println("xxxxxxxxxxxxxxxxSE HA PRODUCIDO EL SIGUIENTE ERROR:" + ex.getMessage() + "xxxxxxxxxxxxxxxx");
+                    response.sendRedirect("http://localhost:30533/Maar/asociados");
                 }
                 break;
-            case "/borrar-usuario":
+            case "/borrar-asociado":
                 try {
-                    asociado = uF.findByUsuario(request.getParameter("usuario"));
-                    if (asociado.getUsuario().equals(request.getParameter("SSusr"))) {
-                        out.print("Error, usuario en uso!");
-                    } else {
-                        uF.remove(asociado);
-                        out.print("Registro correcto");
-                    }
+                    
+                    asociado = aF.findByUsuario(request.getParameter("usuario"));                                                            
+                    
+                    
+                        aF.remove(asociado);
+                        out.print("Registro correcto");                    
                 } catch (Exception ex) {
                     System.out.println("xxxxxxxxxxxxxxxxSE HA PRODUCIDO EL SIGUIENTE ERROR:" + ex.getMessage() + "xxxxxxxxxxxxxxxx");
+                    response.sendRedirect("http://localhost:30533/Maar/asociados");
                 }
                 break;
             case "/profile":
                 try {
-                    asociado = uF.find(parseInt((request.getParameter("SSidAso"))));
-                    if ((asociado.getContraseña().equals(getMD5(request.getParameter("SSpassword"))) && asociado.getContraseña().equals(getMD5(request.getParameter("SSRpassword")))) || (request.getParameter("SSpassword").equals(request.getParameter("SSRpassword")))) {
-                        Asociado us = uF.findDuplicateUpdate(request.getParameter("SSusuario"), asociado.getUsuario());
+               Asociado     aso = aF.find(parseInt((request.getParameter("SSidAso"))));
+                    if ((aso.getContraseña().equals(getMD5(request.getParameter("SSpassword"))) && aso.getContraseña().equals(getMD5(request.getParameter("SSRpassword")))) || (request.getParameter("SSpassword").equals(request.getParameter("SSRpassword")))) {
+                        Asociado us = aF.findDuplicateUpdate(request.getParameter("SSusuario"), aso.getUsuario());
                         if (us.getUsuario().equals("disponible")) {
-                            if (asociado.getContraseña().equals(request.getParameter("SSpassword")) && asociado.getContraseña().equals(request.getParameter("SSRpassword"))) {
-                                asociado.setContraseña((request.getParameter("SSpassword")));
+                            if (aso.getContraseña().equals(request.getParameter("SSpassword")) && aso.getContraseña().equals(request.getParameter("SSRpassword"))) {
+                                aso.setContraseña((request.getParameter("SSpassword")));
                             } else {
-                                asociado.setContraseña(getMD5(request.getParameter("SSpassword")));
+                                aso.setContraseña(getMD5(request.getParameter("SSpassword")));
                             }
-                            asociado.setUsuario(request.getParameter("SSusuario"));
-                            uF.edit(asociado);
+                            aso.setUsuario(request.getParameter("SSusuario"));
+                            aF.Update(asociado);
                             out.print("Registro correcto");
                         } else {
                             out.print("Usuario no disponible");
@@ -195,11 +197,12 @@ public class CtlUsuarios extends HttpServlet {
                     }
                 } catch (Exception ex) {
                     System.out.println("xxxxxxxxxxxxxxxxSE HA PRODUCIDO EL SIGUIENTE ERROR:" + ex.getMessage() + "xxxxxxxxxxxxxxxx");
+                    response.sendRedirect("http://localhost:30533/Maar/asociados");
                 }
                 break;
 
             default:
-                response.sendRedirect("http://localhost:30533/Maar/usuarios");
+                response.sendRedirect("http://localhost:30533/Maar/asociados");
 
         }
     }

@@ -5,7 +5,7 @@
 --%>
 <div class="row">
     <div class="col-sm-11 col-md-11 col-lg-11">
-<h1><i class="fa fa-users"></i>  Lista de roles</h1>   
+<h1><i class="fa fa-list-alt"></i>  Lista de roles</h1>   
 </div>      
 <div class="col-sm-1 col-md-1 col-lg-1">
     <br><i class="fa fa-plus  fa-3x"  onclick="location.href = 'agregar-rol'"></i> 
@@ -13,11 +13,11 @@
     
 </div>
 <br>
-<table  table id="users" class="table table-striped table-bordered" style="width:100%">
+<table  table  class="table table-striped table-bordered" style="width:100%">
     <thead>
         <tr>
-            <th align="center">NOMBRE</th>            
-            <th align="center">OPCIONES</th>
+            <th style="text-align:center">NOMBRE</th>            
+            <th style="text-align:center">OPCIONES</th>
         </tr>
     </thead>
     <tbody>

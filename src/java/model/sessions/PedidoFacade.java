@@ -33,7 +33,7 @@ public class PedidoFacade extends AbstractFacade<Pedido> {
 
     public Pedido findSucursal(Integer idSuc) {
     Pedido pedido = new Pedido();
-        Query query = em.createNativeQuery("select * from pedido where id_suc = ? LIMIT 1;", Pedido.class);
+        Query query = em.createNativeQuery("select * from pedido where id_suc = ? LIMIT 1", Pedido.class);
         query.setParameter(1, idSuc);                
         try {
            return (Pedido) query.getSingleResult();
@@ -42,6 +42,31 @@ public class PedidoFacade extends AbstractFacade<Pedido> {
             return pedido;                                    
         }                         
     }
+    
+    
+    
+    public void Insert(Pedido pedido) {
+        Pedido persistance = new Pedido();
+        em.persist(persistance);
+        persistance.setIdPed(pedido.getIdPed());
+        persistance.setIdPro(pedido.getIdPro());
+        persistance.setCantidad(pedido.getCantidad());
+        persistance.setDireccion(pedido.getDireccion());
+        persistance.setComentario(pedido.getComentario());
+        persistance.setIdClien(pedido.getIdClien());
+        persistance.setIdSuc(pedido.getIdSuc());
+    }   
+    
+    public void Update(Pedido pedido) {                
+        em.merge(pedido);        
+    }
+    
+    
+    public Pedido getId() {        
+        Query query = em.createNativeQuery("SELECT * FROM pedido ORDER by id_Ped DESC LIMIT 1", Pedido.class);        
+            return (Pedido) query.getSingleResult();        
+    }
+    
     
         
 }

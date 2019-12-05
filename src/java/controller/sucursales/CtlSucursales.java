@@ -39,7 +39,7 @@ public class CtlSucursales extends HttpServlet {
     private PedidoFacade pF;
 
     String url = "";
-
+       
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -54,22 +54,22 @@ public class CtlSucursales extends HttpServlet {
         HttpSession session = request.getSession(false);
         if (session != null) {
             url = request.getServletPath();
-            Sucursal sucursal = new Sucursal();
+            Sucursal sucursal;
             List<Sucursal> sucursales;
             List<Cliente> clientes;
             switch (url) {
-                case "/sucursales":
+                case "/sucursales":                    
                     sucursales = sF.findAll();
                     request.setAttribute("sucursales", sucursales);
                     request.setAttribute("usuario", session.getAttribute("SSusuario"));
-                    getServletContext().getRequestDispatcher("/WEB-INF/views/sucursales/sucursales.jsp").forward(request, response);
+                    getServletContext().getRequestDispatcher("/WEB-INF/views/branches/sucursales.jsp").forward(request, response);
                     break;
                 case "/agregar-sucursal":
                     clientes = cF.findAll();
                     request.setAttribute("titulo", "Agregar sucursal");
                     request.setAttribute("action", "agregar-sucursal");
                     request.setAttribute("clientes", clientes);
-                    getServletContext().getRequestDispatcher("/WEB-INF/views/sucursales/form.jsp").forward(request, response);
+                    getServletContext().getRequestDispatcher("/WEB-INF/views/branches/form.jsp").forward(request, response);
                     break;
                 case "/editar-sucursal":
                     sucursal = sF.find(Integer.parseInt(request.getParameter("i")));
@@ -77,8 +77,8 @@ public class CtlSucursales extends HttpServlet {
                     request.setAttribute("titulo", "Editar sucursal " + sucursal.getNombre());
                     request.setAttribute("action", "editar-sucursal");
                     request.setAttribute("clientes", clientes);
-                    request.setAttribute("dato", sucursal);
-                    getServletContext().getRequestDispatcher("/WEB-INF/views/sucursales/form.jsp").forward(request, response);
+                    request.setAttribute("sucursal", sucursal);
+                    getServletContext().getRequestDispatcher("/WEB-INF/views/branches/form.jsp").forward(request, response);
                     break;
             }
         } else {
@@ -105,44 +105,41 @@ public class CtlSucursales extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         switch (url) {
             case "/agregar-sucursal":
-                try {
-                    Sucursal suc = new Sucursal();
-                    suc = sF.findDuplicate(request.getParameter("direccion"));
-                    if (suc.getNombre().equals("disponible")) {
+                try {                    
+                    Sucursal duplicate = sF.findDuplicate(request.getParameter("direccionSucursal"));
+                    if (duplicate.getNombre().equals("disponible")) {
                         sucursal.setIdSuc(0);
-                        sucursal.setNombre(request.getParameter("nombre"));
-                        sucursal.setDireccion(request.getParameter("direccion"));
+                        sucursal.setNombre(request.getParameter("nombreSucursal"));
+                        sucursal.setDireccion(request.getParameter("direccionSucursal"));
                         sucursal.setNotienda(request.getParameter("notienda"));
                         sucursal.setIdClien(cF.find(Integer.parseInt(request.getParameter("idClien"))));
-                        sF.create(sucursal);
-                        out.print("Registro correcto");
+                        sF.Insert(sucursal);                        
+                        out.print("Registro correcto");                        
                     } else {
-                        out.print("Dirección de sucursal no disponible");
+                        out.print("Sucursal no disponible");
                     }
                 } catch (Exception ex) {
                     System.out.println("xxxxxxxxxxxxxxxxSE HA PRODUCIDO EL SIGUIENTE ERROR:" + ex.getMessage() + "xxxxxxxxxxxxxxxx");
-                    response.sendRedirect("http://localhost:30533/Maar/agregar-sucursal");
+                      response.sendRedirect("http://localhost:30533/Maar/agregar-sucursal");
                 }
                 break;
             case "/editar-sucursal":
-                try {
-                    cliente = cF.find(Integer.parseInt(request.getParameter("idClien")));
-                    sucursal = sF.find(Integer.parseInt(request.getParameter("idSuc")));
-                    Sucursal suc = new Sucursal();
-                    suc = sF.findDuplicateUpdate(request.getParameter("direccion"), sucursal.getDireccion());
+                try {                    
+                    sucursal = sF.find(Integer.parseInt(request.getParameter("idSuc")));                     
+                    Sucursal suc = sF.findDuplicateUpdate(request.getParameter("direccionSucursal"), sucursal.getDireccion());
                     if (suc.getDireccion().equals("disponible")) {
-                        sucursal.setNombre(request.getParameter("nombre"));
-                        sucursal.setDireccion(request.getParameter("direccion"));
+                        sucursal.setNombre(request.getParameter("nombreSucursal"));
+                        sucursal.setDireccion(request.getParameter("direccionSucursal"));
                         sucursal.setNotienda(request.getParameter("notienda"));
-                        sucursal.setIdClien(cliente);
-                        sF.edit(sucursal);
+                        sucursal.setIdClien(cF.find(Integer.parseInt(request.getParameter("idClien"))));
+                        sF.Update(sucursal);
                         out.print("Registro correcto");
                     } else {
-                        out.print("Dirección de sucursal no disponible");
+                        out.print("Sucursal no disponible");
                     }
                 } catch (Exception ex) {
                     System.out.println("xxxxxxxxxxxxxxxxSE HA PRODUCIDO EL SIGUIENTE ERROR:" + ex.getMessage() + "xxxxxxxxxxxxxxxx");
-                    response.sendRedirect("http://localhost:30533/Maar/editar-sucursal");
+                    response.sendRedirect("http://localhost:30533/Maar/sucursales");
                 }
                 break;
             case "/borrar-sucursal":
@@ -153,7 +150,7 @@ public class CtlSucursales extends HttpServlet {
                         sF.remove(sucursal);
                         out.print("Registro correcto");
                     } else {
-                        out.print("Error, esta sucursal contiene pedidos ligados");
+                        out.print("Error, la sucursal contiene pedidos ligados");
                     }
                 } catch (Exception ex) {
                     System.out.println("xxxxxxxxxxxxxxxxSE HA PRODUCIDO EL SIGUIENTE ERROR:" + ex.getMessage() + "xxxxxxxxxxxxxxxx");

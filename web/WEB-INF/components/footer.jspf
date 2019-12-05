@@ -39,6 +39,13 @@
 <script  src="Resources/users/script.js"></script>
 <script  src="Resources/roles/script.js"></script>
 <script  src="Resources/branches/script.js"></script>
+<script  src="Resources/clients/script.js"></script>
+<script  src="Resources/fiscals/script.js"></script>
+<script  src="Resources/categories/script.js"></script>
+<script  src="Resources/products/script.js"></script>
+<script  src="Resources/orders/script.js"></script>
+<script  src="Resources/sales/script.js"></script>
+
 
 
 

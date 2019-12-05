@@ -8,7 +8,6 @@ package model.entities;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,7 +19,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -49,58 +47,36 @@ public class Asociado implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_Aso")
     private Integer idAso;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 40)
+    @Size(max = 40)
     @Column(name = "nombre")
     private String nombre;
-    @Basic(optional = false)
-    @NotNull
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "salario")
-    private double salario;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 40)
+    private Double salario;
+    @Size(max = 40)
     @Column(name = "celular")
     private String celular;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 40)
+    @Size(max = 40)
     @Column(name = "direccion")
     private String direccion;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 40)
+    @Size(max = 40)
     @Column(name = "usuario")
     private String usuario;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 40)
+    @Size(max = 40)
     @Column(name = "contrase\u00f1a")
     private String contraseña;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idAso")
+    @OneToMany(mappedBy = "idAso")
     private List<Venta> ventaList;
     @JoinColumn(name = "id_Rol", referencedColumnName = "id_Rol")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Rol idRol;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idAso")
-    private List<Cuenta> cuentaList;
+   
 
     public Asociado() {
     }
 
     public Asociado(Integer idAso) {
         this.idAso = idAso;
-    }
-
-    public Asociado(Integer idAso, String nombre, double salario, String celular, String direccion, String usuario, String contraseña) {
-        this.idAso = idAso;
-        this.nombre = nombre;
-        this.salario = salario;
-        this.celular = celular;
-        this.direccion = direccion;
-        this.usuario = usuario;
-        this.contraseña = contraseña;
     }
 
     public Integer getIdAso() {
@@ -119,11 +95,11 @@ public class Asociado implements Serializable {
         this.nombre = nombre;
     }
 
-    public double getSalario() {
+    public Double getSalario() {
         return salario;
     }
 
-    public void setSalario(double salario) {
+    public void setSalario(Double salario) {
         this.salario = salario;
     }
 
@@ -175,15 +151,7 @@ public class Asociado implements Serializable {
     public void setIdRol(Rol idRol) {
         this.idRol = idRol;
     }
-
-    @XmlTransient
-    public List<Cuenta> getCuentaList() {
-        return cuentaList;
-    }
-
-    public void setCuentaList(List<Cuenta> cuentaList) {
-        this.cuentaList = cuentaList;
-    }
+    
 
     @Override
     public int hashCode() {

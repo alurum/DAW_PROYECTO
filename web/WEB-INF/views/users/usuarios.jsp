@@ -5,14 +5,14 @@
 --%>
 <div class="row">
     <div class="col-sm-11 col-md-11 col-lg-11">
-<h1><i class="fa fa-users"></i>  Lista de usuarios</h1>   
+<h1><i class="fa fa-list-alt"></i>  Lista de asociados</h1>   
 </div>      
 <div class="col-sm-1 col-md-1 col-lg-1">
-<br><i class="fa fa-plus  fa-3x"  onclick="location.href = 'agregar-usuario'"></i> 
+<br><i class="fa fa-plus  fa-3x"  onclick="location.href = 'agregar-asociado'"></i> 
 </div>
 </div>
 <br>
-<table  table id="users" class="table table-striped table-bordered" style="width:100%">
+<table  table  class="table table-striped table-bordered" style="width:100%">
     <thead>
         <tr>
             <th style="text-align:center">NOMBRE</th>
@@ -25,18 +25,18 @@
         </tr>
     </thead>
     <tbody>
-        <c:forEach var="dato" items="${datos}">
+        <c:forEach var="asociado" items="${asociados}">
             <tr>                    
-                <td>${dato.nombre}</td>
-                <td>${dato.salario}</td>
-                <td>${dato.celular}</td>
-                <td>${dato.direccion}</td>
-                <td>${dato.usuario}</td>
-                <td>${dato.idRol.nombre}</td>
+                <td>${asociado.nombre}</td>
+                <td>${asociado.salario}</td>
+                <td>${asociado.celular}</td>
+                <td>${asociado.direccion}</td>
+                <td>${asociado.usuario}</td>
+                <td>${asociado.idRol.nombre}</td>
                 
                 <td align="center">                                       
-                    <button type="button" class="btn btn-warning btn-sm"  name="Editar"  onclick="location.href = 'editar-usuario?i=${dato.usuario}'"><i class="fa fa-pencil-square-o"></i> Editar</button> 
-                    <button type="button" class="btn btn-danger btn-sm " name="Borrar"  onclick="drop ( '${dato.usuario}', '${SSusuario}' ) "><i class="fa fa-remove"></i> Borrar</button>
+                    <button type="button" class="btn btn-warning btn-sm"  name="Editar"  onclick="location.href = 'editar-asociado?i=${asociado.usuario}'"><i class="fa fa-pencil-square-o"></i> Editar</button> 
+                    <button type="button" class="btn btn-danger btn-sm " name="Borrar"  onclick="dropUsuario ( '${asociado.usuario}' ) "><i class="fa fa-remove"></i> Borrar</button>
                 </td>                                                                       
             </tr>
         </c:forEach>

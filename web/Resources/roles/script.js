@@ -1,17 +1,27 @@
 
  function dropRol(idRol) {
-        if (confirm("¿Seguro que deseas realizar esta accion?")) {
+        if (confirm("\u00bfSeguro que deseas realizar esta acci\u00f3n?")) {
             txt = "You pressed OK!";
             $.ajax({
                 url: 'borrar-rol',
                 type: "POST",
+                dataType: 'text',
                 data: {idRol: idRol},
                 success: function (resultado) {
-                    location.reload();
-                    alert(resultado);
+                    switch (resultado) {
+                    case "Registro correcto":
+                        location.reload();
+                        alert(resultado);
+                        break;
+                    case "Error, el rol contiene usuarios ligados":                      
+                        alert(resultado);
+                        break;
+                    default :
+                        location.reload();
+                }
                 },
                 error: function (resultado) {
-                    alert("Algo salio mal, intente nuevamente");
+                    alert("Algo salió mal, intentelo nuevamente");
                 }
             });
 
@@ -23,41 +33,35 @@
 
 
 
-    jQuery(document).ready(function ($) {
-
-        $("#registrarRol").click(function () {
-            var action = document.getElementById("action").value;
-            var idRol = document.getElementById("idRol").value;
-            var nombre = document.getElementById("nombreRol").value;
-            $.ajax({
-                url: action,
-                type: 'POST',
-                data: {idRol: idRol, nombre: nombre},
+    function registrarRol() {             
+        $.ajax({                                
+                type: 'POST',                           
+                data : $("#formRol").serialize(),
                 success: function (resultado) {
                     switch (resultado) {
                         case "Registro correcto":
                             location.href = 'http://localhost:30533/Maar/roles';
                             alert(resultado);
                             break;
-                        case "Rol no disponible":
+                        case "Rol no disponible":                                                                                   
+                            alert(resultado);                            
                             location.reload();
-                            alert(resultado);
                             break;
                             defaul:
-                                    location.reload();
+                            location.reload();
                     }
                 },
                 error: function (resultado) {
                     location.reload();
-                    alert("Algo salio mal, intente nuevamente");
+                    alert("Algo salió mal, intentelo nuevamente");
                 }
 
             });
 
-        });
+        }
 
+    
 
-
-
+    jQuery(document).ready(function ($){
 
     });

@@ -8,7 +8,6 @@ package model.entities;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,7 +19,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -46,29 +44,23 @@ public class Cliente implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_Clien")
     private Integer idClien;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 40)
+    @Size(max = 40)
     @Column(name = "nombre")
     private String nombre;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 40)
+    @Size(max = 40)
     @Column(name = "direccion")
     private String direccion;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 40)
+    @Size(max = 40)
     @Column(name = "tel")
     private String tel;
     @JoinColumn(name = "id_Fis", referencedColumnName = "id_Fis")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Fiscal idFis;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idClien")
+    @OneToMany(mappedBy = "idClien")
     private List<Venta> ventaList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idClien")
+    @OneToMany(mappedBy = "idClien")
     private List<Sucursal> sucursalList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idClien")
+    @OneToMany(mappedBy = "idClien")
     private List<Pedido> pedidoList;
 
     public Cliente() {
@@ -76,13 +68,6 @@ public class Cliente implements Serializable {
 
     public Cliente(Integer idClien) {
         this.idClien = idClien;
-    }
-
-    public Cliente(Integer idClien, String nombre, String direccion, String tel) {
-        this.idClien = idClien;
-        this.nombre = nombre;
-        this.direccion = direccion;
-        this.tel = tel;
     }
 
     public Integer getIdClien() {

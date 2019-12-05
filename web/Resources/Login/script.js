@@ -31,7 +31,7 @@ jQuery(document).ready(function ($) {
             success: function (resultado) {
                 if (resultado === "Datos correctos") {
                     alert("Datos correctos");
-                    location.href = 'http://localhost:30533/Maar/usuarios';
+                    location.href = 'http://localhost:30533/Maar/asociados';
                 } else {
                     alert("Datos erroneos");
                 }

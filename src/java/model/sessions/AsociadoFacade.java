@@ -88,7 +88,7 @@ public class AsociadoFacade extends AbstractFacade<Asociado> {
     
     public Asociado findRol(Integer idRol ) {
         Asociado asc = new Asociado();
-        Query query = em.createNativeQuery("select * from asociado where id_Rol = ? LIMIT 1;", Asociado.class);
+        Query query = em.createNativeQuery("select * from asociado where id_Rol = ? LIMIT 1", Asociado.class);
         query.setParameter(1, idRol);                
         try {
            return (Asociado) query.getSingleResult();
@@ -97,8 +97,22 @@ public class AsociadoFacade extends AbstractFacade<Asociado> {
             return asc;                                    
         }                         
     }
-    
-    
-  
+        
+    public void Insert(Asociado asociado) {
+        Asociado persistance = new Asociado();
+        em.persist(persistance);
+        persistance.setIdAso(asociado.getIdAso());
+        persistance.setNombre(asociado.getNombre());
+        persistance.setSalario(asociado.getSalario());
+        persistance.setCelular(asociado.getCelular());
+        persistance.setDireccion(asociado.getDireccion());
+        persistance.setUsuario(asociado.getUsuario());
+        persistance.setContraseña(asociado.getContraseña());
+        persistance.setIdRol(asociado.getIdRol());
+    }
+       
+    public void Update(Asociado asociado) {                
+        em.merge(asociado);        
+    }
 
 }

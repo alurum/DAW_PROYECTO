@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="">
@@ -45,7 +45,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="http://localhost:30533/Maar/usuarios"><i class="fa fa-home"></i>  INICIO</a>
+                    <a class="navbar-brand" href="http://localhost:30533/Maar/asociados"><i class="fa fa-home"></i>  INICIO</a>
                 </div>
                 <!-- Top Menu Items -->
                 <ul class="nav navbar-right top-nav">                                        
@@ -64,41 +64,52 @@
                 </ul>
                 <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
                 <div class="collapse navbar-collapse navbar-ex1-collapse">
-                    <ul class="nav navbar-nav side-nav">                        
+                    <ul class="nav navbar-nav side-nav">                                                
+                           <li>
+                            <a href="javascript:;" data-toggle="collapse" data-target="#productos"><i class="fa fa-fw fa-wrench"></i> Productos <i class="fa fa-fw fa-caret-down"></i></a>
+                            <ul id="productos" class="collapse">                                
+                                <li>
+                                    <a href="http://localhost:30533/Maar/productos">Productos</a>
+                                </li>                                
+                                <li>
+                                    <a href="http://localhost:30533/Maar/categorias">Categorias</a>
+                                </li>                                
+                            </ul>
+                        </li> 
+                        
                         <li>
-                            <a href="http://localhost:30533/Maar/usuarios"><i class="fa fa-fw fa-user"></i> Usuarios</a>
-                        </li>
-                        <li>
-                            <a href="http://localhost:30533/Maar/roles"><i class="fa fa-male"></i> Roles</a>
-                        </li>
-                        <li>
-                            <a href="http://localhost:30533/Maar/sucursales"><i class="fa fa-male"></i> Sucursales</a>
-                        </li>
+                            <a href="javascript:;" data-toggle="collapse" data-target="#asociado"><i class="fa fa-fw fa-edit"></i> Asociado <i class="fa fa-fw fa-caret-down"></i></a>
+                            <ul id="asociado" class="collapse">                                
+                                <li>
+                                    <a href="http://localhost:30533/Maar/asociados">Asociados</a>
+                                </li>
+                                <li>
+                                    <a href="http://localhost:30533/Maar/roles">Roles</a>
+                                </li>                                
+                            </ul>
+                        </li>                                                               
                         <li>
                             <a href="javascript:;" data-toggle="collapse" data-target="#ventas"><i class="fa fa-fw fa-money"></i> Ventas <i class="fa fa-fw fa-caret-down"></i></a>
                             <ul id="ventas" class="collapse">
                                 <li>
-                                    <a href="#">Ventas</a>
+                                    <a href="http://localhost:30533/Maar/ventas">Ventas</a>
                                 </li>
                                 <li>
-                                    <a href="#">Pedidos</a>
+                                    <a href="http://localhost:30533/Maar/pedidos">Pedidos</a>
                                 </li>
                             </ul>
-                        </li>                         
-                        <li>                            
-                            <a href="forms.html"><i class="fa fa-fw fa-edit"></i> Facturas</a>
-                        </li>                        
-                        <li>
-                            <a href="bootstrap-grid.html"><i class="fa fa-fw fa-wrench"></i> Compras</a>
-                        </li>                    
+                        </li>                                                 
                         <li>
                             <a href="javascript:;" data-toggle="collapse" data-target="#clientes"><i class="fa fa-fw fa-user"></i> Clientes <i class="fa fa-fw fa-caret-down"></i></a>
-                            <ul id="clientes" class="collapse">
+                            <ul id="clientes" class="collapse">                                
                                 <li>
-                                    <a href="#">Mayoreo</a>
+                                    <a href="http://localhost:30533/Maar/clientes">Clientes</a>
                                 </li>
                                 <li>
-                                    <a href="#">Menudeo</a>
+                                    <a href="http://localhost:30533/Maar/fiscales">Fiscales</a>
+                                </li>
+                                <li>
+                                    <a href="http://localhost:30533/Maar/sucursales">Sucursales</a>
                                 </li>
                             </ul>
                         </li>                                                               
@@ -107,5 +118,6 @@
                 <!-- /.navbar-collapse -->
             </nav>
 
-            <div id="page-wrapper">
-                <div class="container-fluid main">      
+            <div id="page-wrapper">                
+                <div class="container-fluid main">                                           
+                    <input name="action" id="action" type="hidden" value="${action}">            

@@ -8,7 +8,6 @@ package model.entities;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,7 +17,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -46,31 +44,21 @@ public class Fiscal implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_Fis")
     private Integer idFis;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 40)
+    @Size(max = 40)
     @Column(name = "nombre")
     private String nombre;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 40)
+    @Size(max = 40)
     @Column(name = "direccion")
     private String direccion;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 40)
+    @Size(max = 40)
     @Column(name = "uso_CFCI")
     private String usoCFCI;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "con_pago")
-    private int conPago;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 40)
+    private Integer conPago;
+    @Size(max = 40)
     @Column(name = "forma_de_pago")
     private String formaDePago;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idFis")
+    @OneToMany(mappedBy = "idFis")
     private List<Cliente> clienteList;
 
     public Fiscal() {
@@ -78,15 +66,6 @@ public class Fiscal implements Serializable {
 
     public Fiscal(Integer idFis) {
         this.idFis = idFis;
-    }
-
-    public Fiscal(Integer idFis, String nombre, String direccion, String usoCFCI, int conPago, String formaDePago) {
-        this.idFis = idFis;
-        this.nombre = nombre;
-        this.direccion = direccion;
-        this.usoCFCI = usoCFCI;
-        this.conPago = conPago;
-        this.formaDePago = formaDePago;
     }
 
     public Integer getIdFis() {
@@ -121,11 +100,11 @@ public class Fiscal implements Serializable {
         this.usoCFCI = usoCFCI;
     }
 
-    public int getConPago() {
+    public Integer getConPago() {
         return conPago;
     }
 
-    public void setConPago(int conPago) {
+    public void setConPago(Integer conPago) {
         this.conPago = conPago;
     }
 

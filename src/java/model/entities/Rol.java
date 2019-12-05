@@ -8,7 +8,6 @@ package model.entities;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,7 +17,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -42,12 +40,10 @@ public class Rol implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_Rol")
     private Integer idRol;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 40)
+    @Size(max = 40)
     @Column(name = "nombre")
     private String nombre;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idRol")
+    @OneToMany(mappedBy = "idRol")
     private List<Asociado> asociadoList;
 
     public Rol() {
@@ -55,11 +51,6 @@ public class Rol implements Serializable {
 
     public Rol(Integer idRol) {
         this.idRol = idRol;
-    }
-
-    public Rol(Integer idRol, String nombre) {
-        this.idRol = idRol;
-        this.nombre = nombre;
     }
 
     public Integer getIdRol() {

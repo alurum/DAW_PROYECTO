@@ -34,7 +34,7 @@ public class CtlRoles extends HttpServlet {
     private AsociadoFacade aF;
 
     String url = "";
-
+    
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -50,14 +50,11 @@ public class CtlRoles extends HttpServlet {
         if (session != null) {
             url = request.getServletPath();
             Rol rol = new Rol();
-            List<Rol> roles;
-            List<Asociado> asociados;
+            List<Rol> roles;            
             switch (url) {
-                case "/roles":
-                    roles = rF.findAll();
-                    asociados = aF.findAll();
-                    request.setAttribute("roles", roles);
-                    request.setAttribute("asociados", asociados);
+                case "/roles":                    
+                    roles = rF.findAll();                    
+                    request.setAttribute("roles", roles);                    
                     request.setAttribute("usuario", session.getAttribute("SSusuario"));
                     getServletContext().getRequestDispatcher("/WEB-INF/views/roles/roles.jsp").forward(request, response);
                     break;
@@ -70,9 +67,9 @@ public class CtlRoles extends HttpServlet {
                     rol = rF.find(Integer.parseInt(request.getParameter("i")));
                     request.setAttribute("titulo", "Editar rol " + rol.getNombre());
                     request.setAttribute("action", "editar-rol");
-                    request.setAttribute("dato", rol);
+                    request.setAttribute("rol", rol);
                     getServletContext().getRequestDispatcher("/WEB-INF/views/roles/form.jsp").forward(request, response);
-                    break;                
+                    break;
             }
         } else {
             response.sendRedirect("http://localhost:30533/Maar/");
@@ -92,53 +89,57 @@ public class CtlRoles extends HttpServlet {
             throws ServletException, IOException {
         url = request.getServletPath();
         PrintWriter out = response.getWriter();
-        Rol rol = new Rol();
+        Rol rol = new Rol();        
         Asociado asociado = new Asociado();
         response.setContentType("text/html;charset=UTF-8");
         switch (url) {
             case "/agregar-rol":
                 try {
-                    rol = rF.findDuplicate(request.getParameter("nombre"));
-                    if (rol.getNombre().equals("disponible")) {
+                    Rol duplicate = rF.findDuplicate(request.getParameter("nombreRol"));                
+                    if (duplicate.getNombre().equals("disponible")) {
                         rol.setIdRol(0);
-                        rol.setNombre(request.getParameter("nombre"));
-                        rF.create(rol);
-                        out.print("Registro correcto");
+                        rol.setNombre(request.getParameter("nombreRol"));                                                                   
+                            rF.Insert(rol);                           
+                            out.print("Registro correcto");                            
                     } else {
-                        out.print("Rol no disponible");
+                        out.print("Rol no disponible");                                              
                     }
-                } catch (Exception ex) {
+                   } catch (Exception ex) {
                     System.out.println("xxxxxxxxxxxxxxxxSE HA PRODUCIDO EL SIGUIENTE ERROR:" + ex.getMessage() + "xxxxxxxxxxxxxxxx");
+                    response.sendRedirect("http://localhost:30533/Maar/agregar-rol");
                 }
                 break;
-                case "/editar-rol":
+            case "/editar-rol":
                 try {
-                    rol = rF.findDuplicate(request.getParameter("nombre"));
-                    if (rol.getNombre().equals("disponible")) {
-                        rol.setNombre(request.getParameter("nombre"));
-                        rF.create(rol);
-                        out.print("Registro correcto");
+                    rol = rF.find(Integer.parseInt(request.getParameter("idRol")));
+                    Rol duplicate = rF.findDuplicateUpdate(request.getParameter("nombreRol"), rol.getNombre());                    
+                    if (duplicate.getNombre().equals("disponible")) {
+                        rol.setNombre(request.getParameter("nombreRol"));
+                        rF.Update(rol);                        
+                        out.print("Registro correcto");                    
                     } else {
                         out.print("Rol no disponible");
-                    }
+                    }                     
                 } catch (Exception ex) {
                     System.out.println("xxxxxxxxxxxxxxxxSE HA PRODUCIDO EL SIGUIENTE ERROR:" + ex.getMessage() + "xxxxxxxxxxxxxxxx");
+                    response.sendRedirect("http://localhost:30533/Maar/roles");
                 }
                 break;
             case "/borrar-rol":
-                try {                    
-                    rol.setIdRol(Integer.parseInt(request.getParameter("idRol")));
+                try {
+                    rol = rF.find((Integer.parseInt(request.getParameter("idRol"))));
                     asociado = aF.findRol(Integer.parseInt(request.getParameter("idRol")));
                     if (asociado.getUsuario().equals("disponible")) {
                         rF.remove(rol);
                         out.print("Registro correcto");
                     } else {
-                        out.print("Error, este rol contiene usuarios ligados");
+                        out.print("Error, el rol contiene usuarios ligados");
                     }
                 } catch (Exception ex) {
                     System.out.println("xxxxxxxxxxxxxxxxSE HA PRODUCIDO EL SIGUIENTE ERROR:" + ex.getMessage() + "xxxxxxxxxxxxxxxx");
+                    response.sendRedirect("http://localhost:30533/Maar/roles");
                 }
-                break;                
+                break;
             default:
                 response.sendRedirect("http://localhost:30533/Maar/roles");
         }
